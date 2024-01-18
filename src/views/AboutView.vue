@@ -4,7 +4,7 @@
     <div class="cards">
       <button @click="onClose()" class="button">Saytni yopish</button>
 
-      <span>{{ {tg?.initDataUnsafe?.user?.username} }}</span>
+      <!-- <span>{{ {tg?.initDataUnsafe?.user?.username} }}</span> -->
 
       <button @click="onToggleButton()" class="button">
         Tugmani koro'rsatish
