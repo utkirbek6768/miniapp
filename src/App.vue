@@ -2,6 +2,7 @@
 import { RouterLink, RouterView } from "vue-router";
 import { watchEffect } from "vue";
 import HelloWorld from "./components/HelloWorld.vue";
+watchEffect(() => {});
 </script>
 
 <template>
@@ -26,9 +27,7 @@ import HelloWorld from "./components/HelloWorld.vue";
 
   <RouterView />
 </template>
-<script setup>
-watchEffect(() => {});
-</script>
+
 <style scoped>
 header {
   line-height: 1.5;
