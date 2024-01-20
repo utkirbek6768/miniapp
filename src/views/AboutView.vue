@@ -1,8 +1,18 @@
 <template>
-  <button @click="sendDataToTelegram" id="button1">Button 1</button>
+  <button @click="sendDataToTelegram">sendData</button>
+  <button @click="onToggleButton">Toggle</button>
 </template>
 
 <script setup>
+const onToggleButton = () => {
+  if (window.Telegram.WebApp) {
+    window.Telegram.WebApp.MainButton.isVisible
+      ? window.Telegram.WebApp.MainButton.hide()
+      : window.Telegram.WebApp.MainButton.show();
+  } else {
+    console.error("Telegram WebApp library is not loaded.");
+  }
+};
 const sendDataToTelegram = () => {
   if (window.Telegram && window.Telegram.WebApp) {
     window.Telegram.WebApp.sendData("BUTTON1");

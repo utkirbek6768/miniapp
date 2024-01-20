@@ -24,15 +24,15 @@ const form = ref({
 
 const isFormValid = ref(true);
 
-// const onToggleButton = () => {
-//   if (window.Telegram.WebApp) {
-//     window.Telegram.WebApp.MainButton.isVisible
-//       ? window.Telegram.WebApp.MainButton.hide()
-//       : window.Telegram.WebApp.MainButton.show();
-//   } else {
-//     console.error("Telegram WebApp library is not loaded.");
-//   }
-// };
+const onToggleButton = () => {
+  if (window.Telegram.WebApp) {
+    window.Telegram.WebApp.MainButton.isVisible
+      ? window.Telegram.WebApp.MainButton.hide()
+      : window.Telegram.WebApp.MainButton.show();
+  } else {
+    console.error("Telegram WebApp library is not loaded.");
+  }
+};
 const sendDataToTelegram = () => {
   if (window.Telegram && window.Telegram.WebApp) {
     window.Telegram.WebApp.sendData("Ishladim");
