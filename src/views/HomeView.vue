@@ -1,6 +1,6 @@
 <script setup>
 // import { onToggleButton } from "../hooks/userTelegram.js";
-import { watchEffect, ref } from "vue";
+import { watchEffect, ref, onMounted, onUnmounted } from "vue";
 const tg = window.Telegram.WebApp;
 
 const form = ref({
@@ -13,29 +13,35 @@ const onClose = () => {
 };
 
 const onToggleButton = () => {
-  if (tg.MainButton.isVisible) {
-    tg.MainButton.hide();
-  } else {
-    tg.MainButton.show();
-  }
+  tg.MainButton.isVisible ? tg.MainButton.hide() : tg.MainButton.show();
 };
 const onSendData = () => {
   tg.sendData(JSON.stringify(form.value));
 };
 watchEffect(() => {
-  if (!form.name || !form.age) {
+  const { name, age } = form.value;
+
+  if (name.trim() === "" || isNaN(age) || +age <= 0) {
     tg.MainButton.hide();
   } else {
     tg.MainButton.show();
   }
 });
-watchEffect(() => {
+onMounted(() => {
   tg.MainButton.setParams({
     text: "Malumotlarni yuborish",
   });
 });
-watchEffect(() => {
-  tg.WebApp.onEvent(mainButtonClicked, onSendData);
+
+onMounted(() => {
+  // Assuming tg.WebApp is the object with onEvent method
+  tg.WebApp.onEvent("mainButtonClicked", onSendData);
+});
+
+// Unregister the event listener when the component is unmounted
+onUnmounted(() => {
+  // Assuming tg.WebApp is the object with offEvent method
+  tg.WebApp.offEvent("mainButtonClicked", onSendData);
 });
 </script>
 
