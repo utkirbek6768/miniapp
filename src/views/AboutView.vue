@@ -1,25 +1,55 @@
 <template>
-  <div>
-    <button @click="handleButtonClick">Click me</button>
-  </div>
+  <button @click="sendDataToTelegram" id="button1">Button 1</button>
 </template>
 
 <script setup>
-// Assume we have a function called onClick in the component
-const onClick = (callback) => {
-  // Assuming Telegram.WebApp.onEvent is available in your context
-  Telegram.WebApp.onEvent("mainButtonClicked", callback);
+const sendDataToTelegram = () => {
+  if (window.Telegram && window.Telegram.WebApp) {
+    window.Telegram.WebApp.sendData("BUTTON1");
+  } else {
+    console.error("Telegram WebApp library is not loaded.");
+  }
 };
 
-// Function to be called when the button is clicked
-const handleButtonClick = () => {
-  console.log("Button clicked!");
+const handleMainButtonClicked = (eventData) => {
+  console.log("Received mainButtonClicked event:", eventData);
+
+  // Send a message to the bot when the mainButtonClicked event fires
+  const message = "Main button clicked!";
+  if (window.Telegram && window.Telegram.WebApp) {
+    window.Telegram.WebApp.sendData(JSON.stringify({ message }));
+  } else {
+    console.error("Telegram WebApp library is not loaded.");
+  }
 };
 
-// Set up the click event using onClick
-onClick(handleButtonClick);
+// Other script setup code if needed
+
+// Attach the event listener when the component is mounted
+onMounted(() => {
+  if (window.Telegram && window.Telegram.WebApp) {
+    window.Telegram.WebApp.onEvent(
+      "mainButtonClicked",
+      handleMainButtonClicked
+    );
+  } else {
+    console.error("Telegram WebApp library is not loaded.");
+  }
+});
+
+// Remove the event listener when the component is unmounted
+onUnmounted(() => {
+  if (window.Telegram && window.Telegram.WebApp) {
+    window.Telegram.WebApp.offEvent(
+      "mainButtonClicked",
+      handleMainButtonClicked
+    );
+  } else {
+    console.error("Telegram WebApp library is not loaded.");
+  }
+});
 </script>
 
-<style>
-/* Add your styles here if needed */
+<style scoped>
+/* Add your styles if needed */
 </style>

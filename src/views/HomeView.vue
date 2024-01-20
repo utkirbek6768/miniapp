@@ -60,28 +60,6 @@ const sendMyName = () => {
   window.Telegram.WebApp.sendData({ name: "utkir" });
 };
 
-// const validateForm = () => {
-//   const { name, age } = form.value;
-//   return name.trim() !== "" || age.trim() !== "";
-// };
-
-// watch(form, () => {
-//   isFormValid.value = validateForm();
-//   if (isFormValid.value) {
-//     if (window.Telegram.WebApp) {
-//       window.Telegram.WebApp.MainButton.show();
-//     } else {
-//       console.error("Telegram WebApp library is not loaded.");
-//     }
-//   } else {
-//     if (window.Telegram.WebApp) {
-//       window.Telegram.WebApp.MainButton.hide();
-//     } else {
-//       console.error("Telegram WebApp library is not loaded.");
-//     }
-//   }
-// });
-
 onMounted(() => {
   if (window.Telegram.WebApp) {
     window.Telegram.WebApp.MainButton.setParams({
