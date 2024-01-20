@@ -15,13 +15,15 @@
 </template>
 
 <script setup>
-import { watch, ref, onMounted, onUnmounted } from "vue";
+import { ref, watch, onMounted, onUnmounted } from "vue";
 const tg = window.Telegram.WebApp;
 
 const form = ref({
   name: "",
   age: "",
 });
+
+const isFormValid = ref(true);
 
 const onClose = () => {
   tg.close();
@@ -32,7 +34,11 @@ const onToggleButton = () => {
 };
 
 const onSendData = () => {
-  tg.sendData(JSON.stringify(form.value));
+  if (isFormValid.value) {
+    tg.sendData(JSON.stringify(form.value));
+  } else {
+    console.warn("Form is not valid. Cannot send data.");
+  }
 };
 
 const validateForm = () => {
@@ -41,10 +47,11 @@ const validateForm = () => {
 };
 
 watch(form, () => {
-  if (validateForm()) {
-    tg.MainButton.hide();
-  } else {
+  isFormValid.value = !validateForm();
+  if (isFormValid.value) {
     tg.MainButton.show();
+  } else {
+    tg.MainButton.hide();
   }
 });
 
