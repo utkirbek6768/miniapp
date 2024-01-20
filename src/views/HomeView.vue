@@ -5,16 +5,16 @@ const tg = window.Telegram.WebApp;
 
 const form = ref({
   name: "",
-  age: null,
+  age: "",
 });
 
 // const onClose = () => {
 //   tg.close();
 // };
 
-const onSendData = useCallback(() => {
-  form;
-});
+// const onSendData = useCallback(() => {
+//   form;
+// });
 watchEffect(() => {
   if (!form.name || !form.age) {
     tg.MainButton.hide();
@@ -27,9 +27,9 @@ watchEffect(() => {
     text: "Malumotlarni yuborish",
   });
 });
-watchEffect(() => {
-  Telegram.WebApp.onEvent(mainButtonClicked, onSendData);
-});
+// watchEffect(() => {
+//   Telegram.WebApp.onEvent(mainButtonClicked, onSendData);
+// });
 </script>
 
 <template>
@@ -41,7 +41,7 @@ watchEffect(() => {
 
       <form :model="form" class="form">
         <input v-model="form.name" type="text" class="input" />
-        <input v-model="form.age" type="number" class="input" />
+        <input v-model="form.age" type="text" class="input" />
         <input type="submit" class="input" />
       </form>
     </div>
