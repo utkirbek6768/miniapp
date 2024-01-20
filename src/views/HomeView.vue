@@ -19,9 +19,9 @@ const onToggleButton = () => {
     tg.MainButton.show();
   }
 };
-// const onSendData = () => {
-//   tg.sendData(JSON.stringify(form.value));
-// };
+const onSendData = () => {
+  tg.sendData(JSON.stringify(form.value));
+};
 watchEffect(() => {
   if (!form.name || !form.age) {
     tg.MainButton.hide();
@@ -34,9 +34,9 @@ watchEffect(() => {
     text: "Malumotlarni yuborish",
   });
 });
-// watchEffect(() => {
-//   tg.WebApp.onEvent(mainButtonClicked, onSendData);
-// });
+watchEffect(() => {
+  tg.WebApp.onEvent(mainButtonClicked, onSendData);
+});
 </script>
 
 <template>
