@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { watchEffect, watch, ref, onMounted, onUnmounted } from "vue";
+import { watch, ref, onMounted, onUnmounted } from "vue";
 const tg = window.Telegram.WebApp;
 
 const form = ref({
@@ -35,17 +35,12 @@ const onSendData = () => {
   tg.sendData(JSON.stringify(form.value));
 };
 
-watchEffect(() => {
+const validateForm = () => {
   const { name, age } = form.value;
+  return name.trim() === "" || isNaN(age) || +age <= 0;
+};
 
-  if (name.trim() === "" || isNaN(age) || +age <= 0) {
-    tg.MainButton.hide();
-  } else {
-    tg.MainButton.show();
-  }
-});
-
-watch(form, (newForm) => {
+watch(form, () => {
   if (validateForm()) {
     tg.MainButton.hide();
   } else {
@@ -57,14 +52,11 @@ onMounted(() => {
   tg.MainButton.setParams({
     text: "Malumotlarni yuborish",
   });
-});
 
-onMounted(() => {
   // Assuming tg.WebApp is the object with onEvent method
   tg.WebApp.onEvent("mainButtonClicked", onSendData);
 });
 
-// Unregister the event listener when the component is unmounted
 onUnmounted(() => {
   // Assuming tg.WebApp is the object with offEvent method
   tg.WebApp.offEvent("mainButtonClicked", onSendData);
