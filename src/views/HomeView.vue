@@ -50,11 +50,11 @@ const onSendData = () => {
 
 const validateForm = () => {
   const { name, age } = form.value;
-  return name.trim() === "" || isNaN(age) || +age <= 0;
+  return name.trim() !== "" || age.trim() !== "";
 };
 
 watch(form, () => {
-  isFormValid.value = !validateForm();
+  isFormValid.value = validateForm();
   if (isFormValid.value) {
     if (window.Telegram.WebApp) {
       window.Telegram.WebApp.MainButton.show();
@@ -69,10 +69,8 @@ watch(form, () => {
     }
   }
 });
-
-const handleMainButtonClicked = (eventData) => {
-  console.log("Received mainButtonClicked event:", eventData);
-  // Handle the received event data as needed
+const sendMyName = () => {
+  window.Telegram.WebApp.sendData({ name: "utkir" });
 };
 
 onMounted(() => {
@@ -81,23 +79,17 @@ onMounted(() => {
       text: "Malumotlarni yuborish",
     });
 
-    window.Telegram.WebApp.onEvent(
-      "mainButtonClicked",
-      handleMainButtonClicked
-    );
+    window.Telegram.WebApp.onEvent("mainButtonClicked", sendMyName);
   } else {
     console.error("Telegram WebApp library is not loaded.");
   }
 });
 
-onUnmounted(() => {
-  if (window.Telegram.WebApp) {
-    window.Telegram.WebApp.offEvent(
-      "mainButtonClicked",
-      handleMainButtonClicked
-    );
-  } else {
-    console.error("Telegram WebApp library is not loaded.");
+onUnmounted(async () => {
+  try {
+    window.Telegram.WebApp.offEvent("mainButtonClicked", sendMyName);
+  } catch (error) {
+    console.log(error);
   }
 });
 </script>
