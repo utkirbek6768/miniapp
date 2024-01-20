@@ -29,8 +29,15 @@ const onToggleButton = () => {
   } else {
     console.error("Telegram WebApp library is not loaded.");
   }
+  sendDataToTelegram();
 };
-
+const sendDataToTelegram = () => {
+  if (window.Telegram && window.Telegram.WebApp) {
+    window.Telegram.WebApp.sendData("Ishladim");
+  } else {
+    console.error("Telegram WebApp library is not loaded.");
+  }
+};
 const onSendData = () => {
   if (isFormValid.value) {
     if (window.Telegram.WebApp) {
