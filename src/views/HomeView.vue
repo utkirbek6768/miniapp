@@ -1,6 +1,21 @@
+<template>
+  <main>
+    <div class="cards">
+      <button @click="onClose()" class="button">Saytni yopish</button>
+      <button @click="onToggleButton()" class="button">Ontoggle button</button>
+
+      <!-- <span>{{ tg?.initDataUnsafe?.user?.username }}</span> -->
+
+      <form :model="form" class="form">
+        <input v-model="form.name" type="text" class="input" />
+        <input v-model="form.age" type="text" class="input" />
+      </form>
+    </div>
+  </main>
+</template>
+
 <script setup>
-// import { onToggleButton } from "../hooks/userTelegram.js";
-import { watchEffect, ref, onMounted, onUnmounted } from "vue";
+import { watchEffect, watch, ref, onMounted, onUnmounted } from "vue";
 const tg = window.Telegram.WebApp;
 
 const form = ref({
@@ -15,9 +30,11 @@ const onClose = () => {
 const onToggleButton = () => {
   tg.MainButton.isVisible ? tg.MainButton.hide() : tg.MainButton.show();
 };
+
 const onSendData = () => {
   tg.sendData(JSON.stringify(form.value));
 };
+
 watchEffect(() => {
   const { name, age } = form.value;
 
@@ -27,6 +44,15 @@ watchEffect(() => {
     tg.MainButton.show();
   }
 });
+
+watch(form, (newForm) => {
+  if (validateForm()) {
+    tg.MainButton.hide();
+  } else {
+    tg.MainButton.show();
+  }
+});
+
 onMounted(() => {
   tg.MainButton.setParams({
     text: "Malumotlarni yuborish",
@@ -44,22 +70,6 @@ onUnmounted(() => {
   tg.WebApp.offEvent("mainButtonClicked", onSendData);
 });
 </script>
-
-<template>
-  <main>
-    <div class="cards">
-      <button @click="onClose()" class="button">Saytni yopish</button>
-      <button @click="onToggleButton()" class="button">Ontoggle button</button>
-
-      <!-- <span>{{ tg?.initDataUnsafe?.user?.username }}</span> -->
-
-      <form :model="form" class="form">
-        <input v-model="form.name" type="text" class="input" />
-        <input v-model="form.age" type="text" class="input" />
-      </form>
-    </div>
-  </main>
-</template>
 
 <style scoped>
 .input {
