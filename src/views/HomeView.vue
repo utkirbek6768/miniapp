@@ -1,22 +1,18 @@
 <template>
   <main>
-    <div class="cards">
-      <button @click="onClose()" class="button">Saytni yopish</button>
-      <button @click="onToggleButton()" class="button">Ontoggle button</button>
+    <button @click="onToggleButton()" class="button">Ontoggle button</button>
 
-      <!-- <span>{{ tg?.initDataUnsafe?.user?.username }}</span> -->
-
-      <form :model="form" class="form">
-        <input v-model="form.name" type="text" class="input" />
-        <input v-model="form.age" type="text" class="input" />
-      </form>
-    </div>
+    <form :model="form" class="form">
+      <input v-model="form.name" type="text" class="input" />
+      <span>{{ form.name }}</span>
+      <input v-model="form.age" type="text" class="input" />
+      <span>{{ form.age }}</span>
+    </form>
   </main>
 </template>
 
 <script setup>
 import { ref, watch, onMounted, onUnmounted } from "vue";
-const tg = window.Telegram.WebApp;
 
 const form = ref({
   name: "",
@@ -25,19 +21,30 @@ const form = ref({
 
 const isFormValid = ref(true);
 
-const onClose = () => {
-  tg.close();
-};
-
 const onToggleButton = () => {
-  tg.MainButton.isVisible ? tg.MainButton.hide() : tg.MainButton.show();
+  if (window.Telegram.WebApp) {
+    window.Telegram.WebApp.MainButton.isVisible
+      ? window.Telegram.WebApp.MainButton.hide()
+      : window.Telegram.WebApp.MainButton.show();
+  } else {
+    console.error("Telegram WebApp library is not loaded.");
+  }
 };
 
 const onSendData = () => {
   if (isFormValid.value) {
-    tg.sendData(JSON.stringify(form.value));
+    if (window.Telegram.WebApp) {
+      window.Telegram.WebApp.sendData(JSON.stringify(form.value));
+    } else {
+      console.error("Telegram WebApp library is not loaded.");
+    }
   } else {
     console.warn("Form is not valid. Cannot send data.");
+    if (window.Telegram.WebApp) {
+      window.Telegram.WebApp.sendData(JSON.stringify(form.value));
+    } else {
+      console.error("Telegram WebApp library is not loaded.");
+    }
   }
 };
 
@@ -49,24 +56,49 @@ const validateForm = () => {
 watch(form, () => {
   isFormValid.value = !validateForm();
   if (isFormValid.value) {
-    tg.MainButton.show();
+    if (window.Telegram.WebApp) {
+      window.Telegram.WebApp.MainButton.show();
+    } else {
+      console.error("Telegram WebApp library is not loaded.");
+    }
   } else {
-    tg.MainButton.hide();
+    if (window.Telegram.WebApp) {
+      window.Telegram.WebApp.MainButton.hide();
+    } else {
+      console.error("Telegram WebApp library is not loaded.");
+    }
   }
 });
 
-onMounted(() => {
-  tg.MainButton.setParams({
-    text: "Malumotlarni yuborish",
-  });
+const handleMainButtonClicked = (eventData) => {
+  console.log("Received mainButtonClicked event:", eventData);
+  // Handle the received event data as needed
+};
 
-  // Assuming tg.WebApp is the object with onEvent method
-  tg.WebApp.onEvent("mainButtonClicked", onSendData);
+onMounted(() => {
+  if (window.Telegram.WebApp) {
+    window.Telegram.WebApp.MainButton.setParams({
+      text: "Malumotlarni yuborish",
+    });
+
+    window.Telegram.WebApp.onEvent(
+      "mainButtonClicked",
+      handleMainButtonClicked
+    );
+  } else {
+    console.error("Telegram WebApp library is not loaded.");
+  }
 });
 
 onUnmounted(() => {
-  // Assuming tg.WebApp is the object with offEvent method
-  tg.WebApp.offEvent("mainButtonClicked", onSendData);
+  if (window.Telegram.WebApp) {
+    window.Telegram.WebApp.offEvent(
+      "mainButtonClicked",
+      handleMainButtonClicked
+    );
+  } else {
+    console.error("Telegram WebApp library is not loaded.");
+  }
 });
 </script>
 
