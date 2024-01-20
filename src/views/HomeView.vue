@@ -1,8 +1,8 @@
 <script setup>
 import { onToggleButton } from "../hooks/userTelegram.js";
 import { watchEffect, ref } from "vue";
-// const tg = window.Telegram.WebApp;
-const { tg } = useTelegram();
+const tg = window.Telegram.WebApp;
+// const { tg } = useTelegram();
 
 const form = ref({
   name: "",
