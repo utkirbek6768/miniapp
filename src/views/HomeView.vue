@@ -1,8 +1,7 @@
 <script setup>
-import { onToggleButton } from "../hooks/userTelegram.js";
+// import { onToggleButton } from "../hooks/userTelegram.js";
 import { watchEffect, ref } from "vue";
 const tg = window.Telegram.WebApp;
-// const { tg } = useTelegram();
 
 const form = ref({
   name: "",
@@ -13,9 +12,16 @@ const onClose = () => {
   tg.close();
 };
 
-const onSendData = () => {
-  tg.sendData(JSON.stringify(form.value));
+const onToggleButton = () => {
+  if (tg.MainButton.isVisible) {
+    tg.MainButton.hide();
+  } else {
+    tg.MainButton.show();
+  }
 };
+// const onSendData = () => {
+//   tg.sendData(JSON.stringify(form.value));
+// };
 watchEffect(() => {
   if (!form.name || !form.age) {
     tg.MainButton.hide();
@@ -28,9 +34,9 @@ watchEffect(() => {
     text: "Malumotlarni yuborish",
   });
 });
-watchEffect(() => {
-  tg.WebApp.onEvent(mainButtonClicked, onSendData);
-});
+// watchEffect(() => {
+//   tg.WebApp.onEvent(mainButtonClicked, onSendData);
+// });
 </script>
 
 <template>
