@@ -1,7 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
 import { watchEffect } from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
 
 const tg = window.Telegram.WebApp;
 watchEffect(() => {
