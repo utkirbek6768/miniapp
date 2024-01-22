@@ -33,7 +33,7 @@ const form = ref({
   age: "",
 });
 const mainButtonShow = () => {
-  if (!form.value.name == "" || !form.value.age == "") {
+  if (form.value.name == "" || form.value.age == "") {
     window.Telegram.WebApp.MainButton.hide();
   } else {
     sendMsg();
