@@ -27,16 +27,9 @@ const sendDataToTelegram = () => {
   }
 };
 
-const handleMainButtonClicked = (eventData) => {
-  console.log("Received mainButtonClicked event:", eventData);
-  window.Telegram.WebApp.sendData(JSON.stringify({ message })); // bu expremant
-  // Send a message to the bot when the mainButtonClicked event fires
+const handleMainButtonClicked = () => {
   const message = "Main button clicked!";
-  if (window.Telegram && window.Telegram.WebApp) {
-    window.Telegram.WebApp.sendData(JSON.stringify({ message }));
-  } else {
-    console.error("Telegram WebApp library is not loaded.");
-  }
+  window.Telegram.WebApp.sendData(JSON.stringify({ message }));
 };
 
 const sendMsg = () => {
