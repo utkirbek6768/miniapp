@@ -22,8 +22,6 @@ const form = ref({
   age: "",
 });
 
-const isFormValid = ref(true);
-
 const onToggleButton = () => {
   if (window.Telegram.WebApp) {
     window.Telegram.WebApp.MainButton.isVisible
@@ -34,27 +32,10 @@ const onToggleButton = () => {
   }
 };
 const sendDataToTelegram = () => {
-  if (window.Telegram && window.Telegram.WebApp) {
-    window.Telegram.WebApp.sendData("Ishladim");
-  } else {
-    console.error("Telegram WebApp library is not loaded.");
-  }
+  window.Telegram.WebApp.sendData("Ishladim");
 };
 const onSendData = () => {
-  if (isFormValid.value) {
-    if (window.Telegram.WebApp) {
-      window.Telegram.WebApp.sendData(JSON.stringify(form.value));
-    } else {
-      console.error("Telegram WebApp library is not loaded.");
-    }
-  } else {
-    console.warn("Form is not valid. Cannot send data.");
-    if (window.Telegram.WebApp) {
-      window.Telegram.WebApp.sendData(JSON.stringify(form.value));
-    } else {
-      console.error("Telegram WebApp library is not loaded.");
-    }
-  }
+  window.Telegram.WebApp.sendData(JSON.stringify(form.value));
 };
 const sendMyName = () => {
   window.Telegram.WebApp.sendData({ name: "utkir" });
@@ -72,13 +53,13 @@ onMounted(() => {
   }
 });
 
-onUnmounted(async () => {
-  try {
-    window.Telegram.WebApp.offEvent("mainButtonClicked", sendMyName);
-  } catch (error) {
-    console.log(error);
-  }
-});
+// onUnmounted(async () => {
+//   try {
+//     window.Telegram.WebApp.offEvent("mainButtonClicked", sendMyName);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
 </script>
 
 <style scoped>
