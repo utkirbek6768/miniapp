@@ -1,5 +1,5 @@
 <template>
-  <div style="border: 1px solid red; width: 100%; height: 100%">
+  <div style="width: 100%; height: 100%; padding: 0px 5px">
     <button @click="sendDataToTelegram()">sendDataToTelegram</button>
     <button @click="handleMainButtonClicked()">handleMainButtonClicked</button>
     <button @click="onToggleButton()">onToggleButton</button>
@@ -18,6 +18,7 @@ const onToggleButton = () => {
     console.error("Telegram WebApp library is not loaded.");
   }
 };
+
 const sendDataToTelegram = () => {
   if (window.Telegram && window.Telegram.WebApp) {
     window.Telegram.WebApp.sendData("BUTTON1");

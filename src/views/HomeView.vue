@@ -5,9 +5,19 @@
     <button @click="onSendData()" class="button">onSendData</button>
 
     <form :model="form" class="form">
-      <input v-model="form.name" type="text" class="input" />
+      <input
+        v-model="form.name"
+        type="text"
+        @change="mainButtonShow()"
+        class="input"
+      />
       <span>{{ form.name }}</span>
-      <input v-model="form.age" type="text" class="input" />
+      <input
+        v-model="form.age"
+        type="text"
+        @change="mainButtonShow()"
+        class="input"
+      />
       <span>{{ form.age }}</span>
     </form>
   </main>
@@ -20,7 +30,13 @@ const form = ref({
   name: "",
   age: "",
 });
-
+const mainButtonShow = () => {
+  if (!form.value.name == "" || !form.value.age == "") {
+    window.Telegram.WebApp.MainButton.hide();
+  } else {
+    window.Telegram.WebApp.MainButton.show();
+  }
+};
 const onToggleButton = () => {
   if (window.Telegram.WebApp) {
     window.Telegram.WebApp.MainButton.isVisible
