@@ -1,8 +1,8 @@
 <template>
-  <div style="border: 1px solid red; width: 400px; height: 400px">
-    <button @click="sendDataToTelegram">sendDataToTelegram</button>
-    <button @click="handleMainButtonClicked">handleMainButtonClicked</button>
-    <button @click="onToggleButton">onToggleButton</button>
+  <div style="border: 1px solid red; width: 100%; height: 100%">
+    <button @click="sendDataToTelegram()">sendDataToTelegram</button>
+    <button @click="handleMainButtonClicked()">handleMainButtonClicked</button>
+    <button @click="onToggleButton()">onToggleButton</button>
   </div>
 </template>
 
@@ -41,7 +41,7 @@ const handleMainButtonClicked = (eventData) => {
 const sendMsg = () => {
   const botToken = "6978212908:AAEjdFxJgAWe3ToUT-cz6qhjot-8qkUqIRU";
   const chatId = 177482674;
-  const message = "6978212908:AAEjdFxJgAWe3ToUT-cz6qhjot-8qkUqIRU";
+  const message = "Main button bosildi";
   const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}`;
   fetch(apiUrl, { method: "GET" })
     .then((response) => response.json())
@@ -53,11 +53,14 @@ const sendMsg = () => {
     });
 };
 
+// watchEffect(() => {
+//   window.Telegram.WebApp.onEvent(
+//     "mainButtonClicked",
+//     window.Telegram.WebApp.sendData(JSON.stringify({ data: "birnima" }))
+//   );
+// });
 watchEffect(() => {
-  window.Telegram.WebApp.onEvent(
-    "mainButtonClicked",
-    window.Telegram.WebApp.sendData(JSON.stringify({ data: "birnima" }))
-  );
+  window.Telegram.WebApp.onEvent("mainButtonClicked", sendMsg);
 });
 
 // onUnmounted(() => {
