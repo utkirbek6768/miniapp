@@ -54,12 +54,10 @@ const sendMsg = () => {
 };
 
 watchEffect(() => {
-  window.Telegram.WebApp.onEvent("mainButtonClicked", sendMsg);
-  if (window.Telegram && window.Telegram.WebApp) {
-    window.Telegram.WebApp.onEvent("mainButtonClicked", sendMsg);
-  } else {
-    console.error("Telegram WebApp library is not loaded.");
-  }
+  window.Telegram.WebApp.onEvent(
+    "mainButtonClicked",
+    window.Telegram.WebApp.sendData(JSON.stringify({ data: "birnima" }))
+  );
 });
 
 // onUnmounted(() => {
