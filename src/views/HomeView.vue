@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, onUnmounted } from "vue";
+import { ref, watch, onMounted, onUnmounted, watchEffect } from "vue";
 
 const form = ref({
   name: "",
@@ -41,7 +41,8 @@ const sendMyName = () => {
   window.Telegram.WebApp.sendData({ name: "utkir" });
 };
 
-onMounted(() => {
+watchEffect(() => {
+  window.Telegram.WebApp.onEvent("mainButtonClicked", sendMyName);
   if (window.Telegram.WebApp) {
     window.Telegram.WebApp.MainButton.setParams({
       text: "Malumotlarni yuborish",
