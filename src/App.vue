@@ -20,8 +20,8 @@ watchEffect(() => {
 
     <div class="wrapper">
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/"><span class="link">Home</span></RouterLink>
+        <RouterLink to="/about"><span class="link">About</span></RouterLink>
         <!-- <RouterLink to="/test">Test</RouterLink> -->
       </nav>
     </div>
