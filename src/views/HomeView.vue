@@ -7,7 +7,7 @@
     <form :model="form" class="form">
       <input v-model="form.name" type="text" class="input" placeholder="Name" />
       <input v-model="form.age" type="text" class="input" placeholder="Age" />
-      <select name="region" id="region" class="select">
+      <select v-model="form.region" name="region" id="region" class="select">
         <option value="fergana">Farg'ona</option>
         <option value="andijon">Andijon</option>
         <option value="namangan">Namangan</option>
@@ -26,6 +26,7 @@ const tg = window.Telegram.WebApp;
 const form = ref({
   name: "",
   age: "",
+  region: "",
 });
 
 const onSendData = () => {
@@ -45,7 +46,11 @@ watchEffect(() => {
 
     tg.onEvent("mainButtonClicked", onSendData);
 
-    if (form.value.name == "" || form.value.age == "") {
+    if (
+      form.value.name == "" ||
+      form.value.age == "" ||
+      form.value.region == ""
+    ) {
       tg.MainButton.hide();
     } else {
       tg.MainButton.show();
