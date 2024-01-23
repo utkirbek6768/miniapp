@@ -1,23 +1,12 @@
 <template>
-  <button @click="sendDataToTelegram()">sendDataToTelegram</button>
-  <button @click="handleMainButtonClicked()">handleMainButtonClicked</button>
+  <h1>Abut Page</h1>
+  <button @click="sendMsg()" class="button">Send MSG to bot</button>
 </template>
 
 <script setup>
-import { watch, watchEffect } from "vue";
+import { watchEffect } from "vue";
 
-const sendDataToTelegram = () => {
-  if (window.Telegram && window.Telegram.WebApp) {
-    window.Telegram.WebApp.sendData("BUTTON1");
-  } else {
-    console.error("Telegram WebApp library is not loaded.");
-  }
-};
-
-const handleMainButtonClicked = () => {
-  const message = "Main button clicked!";
-  window.Telegram.WebApp.sendData(JSON.stringify({ message }));
-};
+const tg = window.Telegram.WebApp;
 
 const sendMsg = () => {
   const botToken = "6978212908:AAEjdFxJgAWe3ToUT-cz6qhjot-8qkUqIRU";
@@ -34,11 +23,5 @@ const sendMsg = () => {
     });
 };
 
-watch(() => {
-  window.Telegram.WebApp.onEvent(
-    "mainButtonClicked",
-    window.Telegram.WebApp.sendData(JSON.stringify({ data: "birnima" }))
-  );
-  window.Telegram.WebApp.onEvent("mainButtonClicked", sendMsg);
-});
+watchEffect(() => {});
 </script>
