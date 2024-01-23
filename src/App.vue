@@ -10,23 +10,13 @@ watchEffect(() => {
 
 <template>
   <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="@/assets/logo.svg"
-      width="125"
-      height="125"
-    />
-
     <div class="wrapper">
       <nav>
         <RouterLink to="/"><span class="link">Home</span></RouterLink>
         <RouterLink to="/about"><span class="link">About</span></RouterLink>
-        <!-- <RouterLink to="/test">Test</RouterLink> -->
       </nav>
     </div>
   </header>
-
   <RouterView />
 </template>
 
@@ -47,15 +37,17 @@ body.gray {
 }
 a {
   color: var(--tg-theme-link-color, #2678b6);
+  border: 1px solid var(--tg-theme-link-color, #000);
+  margin-right: 10px;
 }
 input[type="text"],
 .input[contenteditable] {
   display: block;
   box-sizing: border-box;
   font-size: 14px;
-  width: 100%;
+  width: 90%;
   padding: 12px 20px;
-  margin: 15px 0;
+  margin: 15px auto;
   border: 1px solid var(--tg-theme-link-color, #000);
   background-color: var(--tg-theme-bg-color, #ffffff);
   border-radius: 4px;

@@ -1,23 +1,10 @@
 <template>
-  <div style="width: 100%; height: 100%; padding: 0px 5px">
-    <button @click="sendDataToTelegram()">sendDataToTelegram</button>
-    <button @click="handleMainButtonClicked()">handleMainButtonClicked</button>
-    <button @click="onToggleButton()">onToggleButton</button>
-  </div>
+  <button @click="sendDataToTelegram()">sendDataToTelegram</button>
+  <button @click="handleMainButtonClicked()">handleMainButtonClicked</button>
 </template>
 
 <script setup>
-import { watchEffect } from "vue";
-
-const onToggleButton = () => {
-  if (window.Telegram.WebApp) {
-    window.Telegram.WebApp.MainButton.isVisible
-      ? window.Telegram.WebApp.MainButton.hide()
-      : window.Telegram.WebApp.MainButton.show();
-  } else {
-    console.error("Telegram WebApp library is not loaded.");
-  }
-};
+import { watch, watchEffect } from "vue";
 
 const sendDataToTelegram = () => {
   if (window.Telegram && window.Telegram.WebApp) {
@@ -47,25 +34,11 @@ const sendMsg = () => {
     });
 };
 
-// watchEffect(() => {
-//   window.Telegram.WebApp.onEvent(
-//     "mainButtonClicked",
-//     window.Telegram.WebApp.sendData(JSON.stringify({ data: "birnima" }))
-//   );
-// });
-watchEffect(() => {
+watch(() => {
+  window.Telegram.WebApp.onEvent(
+    "mainButtonClicked",
+    window.Telegram.WebApp.sendData(JSON.stringify({ data: "birnima" }))
+  );
   window.Telegram.WebApp.onEvent("mainButtonClicked", sendMsg);
 });
-
-// onUnmounted(() => {
-//   if (window.Telegram && window.Telegram.WebApp) {
-//     window.Telegram.WebApp.offEvent("mainButtonClicked", sendMsg);
-//   } else {
-//     console.error("Telegram WebApp library is not loaded.");
-//   }
-// });
 </script>
-
-<style scoped>
-/* Add your styles if needed */
-</style>
