@@ -46,20 +46,71 @@ a {
   border: 1px solid var(--tg-theme-link-color, #000);
   margin-right: 10px;
 }
+.btn {
+  font-size: 14px;
+  padding: 10px 17px;
+}
+
+.btn-primary {
+  background-color: var(--tg-theme-button-color, #50a8eb);
+  color: var(--tg-theme-button-text-color, #fff);
+  border: none;
+}
+
+button {
+  display: block;
+  width: 100%;
+  font-size: 14px;
+  margin: 15px 0;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--tg-theme-button-color, #50a8eb);
+  color: var(--tg-theme-button-text-color, #ffffff);
+  cursor: pointer;
+}
+
+.main-container {
+  padding: 15px;
+}
+.list-header {
+  text-transform: uppercase;
+  font-size: 0.92em;
+  color: var(--tg-theme-hint-color, #ccc);
+  margin: 0 0 10px;
+}
+
+button[disabled] {
+  opacity: 0.6;
+  cursor: auto;
+  pointer-events: none;
+}
+
+button.close_btn {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 0;
+  margin: 0;
+  padding: 16px 20px;
+  text-transform: uppercase;
+}
 input[type="text"],
 .input[contenteditable] {
   display: block;
   box-sizing: border-box;
   font-size: 14px;
-  width: 90%;
+  width: 100%;
   padding: 12px 20px;
-  margin: 15px auto;
+  margin: 15px 0;
   border: 1px solid var(--tg-theme-link-color, #000);
   background-color: var(--tg-theme-bg-color, #ffffff);
   border-radius: 4px;
   color: var(--tg-theme-text-color, #222222);
   text-align: start;
 }
+
 input[type="text"]::-webkit-input-placeholder {
   color: var(--tg-theme-hint-color, #ccc);
 }
@@ -71,9 +122,11 @@ input[type="text"]::-moz-placeholder {
 input[type="text"]:-ms-input-placeholder {
   color: var(--tg-theme-hint-color, #ccc);
 }
+
 .input[data-placeholder] {
   position: relative;
 }
+
 .input[data-placeholder]:empty:before {
   position: absolute;
   left: 0;
@@ -88,56 +141,6 @@ input[type="text"]:-ms-input-placeholder {
   pointer-events: none;
   z-index: -1;
 }
-/* Shared styles for input and select */
-.input,
-select {
-  display: block;
-  box-sizing: border-box;
-  font-size: 14px;
-  width: 90%;
-  padding: 12px 20px; /* Fix: Corrected 'by' to '20px' */
-  margin: 15px auto;
-  border: 1px solid var(--tg-theme-link-color, #000);
-  background-color: var(--tg-theme-bg-color, #ffffff);
-  border-radius: 4px;
-  color: var(--tg-theme-text-color, #222222);
-  text-align: start;
-}
-
-/* Placeholder styles for input */
-.input[data-placeholder]:empty:before,
-select[data-placeholder]:empty:before {
-  position: absolute;
-  left: 0;
-  right: 0;
-  content: attr(data-placeholder);
-  color: var(--tg-theme-hint-color, #ccc);
-  padding: 0 20px;
-  font-weight: normal;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: -1;
-}
-
-/* Placeholder styles for input in WebKit browsers */
-.select[data-placeholder]::-webkit-input-placeholder,
-select[data-placeholder]::-webkit-input-placeholder {
-  color: var(--tg-theme-hint-color, #ccc);
-}
-
-/* Placeholder styles for input in Mozilla Firefox */
-.select[data-placeholder]::-moz-placeholder,
-select[data-placeholder]::-moz-placeholder {
-  color: var(--tg-theme-hint-color, #ccc);
-}
-
-/* Placeholder styles for input in Microsoft Edge */
-.select[data-placeholder]:-ms-input-placeholder,
-select[data-placeholder]:-ms-input-placeholder {
-  color: var(--tg-theme-hint-color, #ccc);
-}
 
 .hint {
   color: var(--tg-theme-hint-color);
@@ -148,22 +151,5 @@ select[data-placeholder]:-ms-input-placeholder {
 
 .link {
   color: var(--tg-theme-link-color);
-}
-.buttons {
-  width: 90%;
-  margin: auto;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.button {
-  background: var(--tg-theme-button-color);
-  color: var(--tg-theme-button-text-color);
-  border: none;
-  font-size: 1rem;
-}
-
-.button:not(:last-child) {
-  margin-left: 1rem;
 }
 </style>

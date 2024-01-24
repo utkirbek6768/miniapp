@@ -1,9 +1,8 @@
 <template>
   <main>
-    <div class="buttons">
-      <button class="button">Button1</button>
-      <button class="button">Button2</button>
-    </div>
+    <button class="btn">btn</button>
+    <button class="btn btn-primary">btn-primary</button>
+    <button class="close_btn">close_btn</button>
     <form :model="form" class="form">
       <input v-model="form.name" type="text" class="input" placeholder="Name" />
       <input v-model="form.age" type="text" class="input" placeholder="Age" />
