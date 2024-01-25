@@ -113,13 +113,6 @@ watchEffect(() => {
     } else {
       tg.MainButton.show();
     }
-    Telegram.WebApp.MainButton.setParams({
-      text: "Main button",
-      is_visible: true,
-    }).onClick(tg.close());
-
-    tg.MainButton.showProgress();
-    tg.MainButton.hideProgress();
   } catch (error) {
     console.log(error);
   }
