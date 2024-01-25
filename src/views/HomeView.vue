@@ -1,6 +1,6 @@
 <template>
   <main>
-    <button class="btn">btn</button>
+    <button class="btn" @click="setBackgroundColor('gray')">btn</button>
     <button class="btn btn-primary">btn-primary</button>
     <button class="close_btn">close_btn</button>
     <button class="btn" @click="tg.requestContact()">requestContact</button>
@@ -113,6 +113,13 @@ watchEffect(() => {
     } else {
       tg.MainButton.show();
     }
+    Telegram.WebApp.MainButton.setParams({
+      text: "Main button",
+      is_visible: true,
+    }).onClick(tg.close());
+
+    tg.MainButton.showProgress();
+    tg.MainButton.hideProgress();
   } catch (error) {
     console.log(error);
   }

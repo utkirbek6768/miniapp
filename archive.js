@@ -105,7 +105,7 @@ tg.MainButton.hideProgress();
 Telegram.WebApp.MainButton.setParams({
   text: "main button closed",
   is_visible: true,
-}).onClick(DemoApp.close);
+}).onClick(tg.close());
 tg.setHeaderColor("secondary_bg_color");
 tg.testClipboard(document.getElementById("clipboard_test"));
 tg.showScanQrPopup(
