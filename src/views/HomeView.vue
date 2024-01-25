@@ -3,6 +3,20 @@
     <button class="btn">btn</button>
     <button class="btn btn-primary">btn-primary</button>
     <button class="close_btn">close_btn</button>
+    <button class="btn" @click="tg.requestContact()">requestContact</button>
+    <button class="btn" @click="tg.showAlert('Salom!')">showAlert</button>
+    <button class="btn" @click="tg.showConfirm('Ishonchingiz komilmi?')">
+      showConfirm
+    </button>
+    <button class="btn" @click="tg.requestWriteAccess()">
+      requestWriteAccess
+    </button>
+    <button class="btn" @click="tg.showPopup()">showPopup</button>
+    <button class="btn" @click="tg.showScanQrPopup()">showScanQrPopup</button>
+    <button class="btn" @click="tg.showScanQrPopup(true)">
+      showScanQrPopup(true)
+    </button>
+
     <form :model="form" class="form">
       <input v-model="form.name" type="text" class="input" placeholder="Name" />
       <input v-model="form.age" type="text" class="input" placeholder="Age" />
