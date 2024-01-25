@@ -12,7 +12,7 @@
       requestWriteAccess
     </button>
     <button class="btn" @click="tg.showPopup()">showPopup</button>
-    <button class="btn" @click="tg.showScanQrPopup()">showScanQrPopup</button>
+    <button class="btn" @click="showScanQrPopup()">showScanQrPopup</button>
     <button class="btn" @click="tg.showScanQrPopup(true)">
       showScanQrPopup(true)
     </button>
@@ -41,6 +41,51 @@ const form = ref({
   age: "",
   region: "",
 });
+// const showScanQrPopup = async () => {
+// tg.showScanQrPopup(params)
+// .then((qrText) => {
+//   console.log('QR-kod matni:', qrText);
+
+//   if (callback) {
+//     const shouldClosePopup = callback(qrText);
+
+//     if (shouldClosePopup) {
+//       console.log('Pop-upni yopish');
+//       tg.closePopup();
+//     }
+//   }
+// })
+// .catch((error) => {
+//   console.error('QR-kod skanlashda xato yuz berdi:', error);
+// });
+// };
+
+const showScanQrPopup = async () => {
+  tg.showScanQrPopup(
+    {
+      text: linksOnly ? "ya.ru" : "google.com",
+    },
+    function (text) {
+      if (linksOnly) {
+        const lowerText = text.toString().toLowerCase();
+        if (
+          lowerText.substring(0, 7) === "http://" ||
+          lowerText.substring(0, 8) === "https://"
+        ) {
+          setTimeout(function () {
+            tg.openLink(text);
+          }, 50);
+
+          return true;
+        }
+      } else {
+        tg.showAlert(text);
+
+        return true;
+      }
+    }
+  );
+};
 
 const onSendData = () => {
   try {
