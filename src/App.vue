@@ -9,13 +9,17 @@ watchEffect(() => {
 </script>
 
 <template>
-  <header>
+  <!-- <header>
     <div class="wrapper">
       <div class="title">Title</div>
       <div class="hint">Qisqacha izoh yozish mumkin</div>
-      <nav></nav>
+      <nav>
+        <RouterLink to="/login">Login</RouterLink>
+        <RouterLink to="/register">Register</RouterLink>
+        <RouterLink to="/abaut">Abaut</RouterLink>
+      </nav>
     </div>
-  </header>
+  </header> -->
   <RouterView />
 </template>
 
@@ -101,9 +105,9 @@ input[type="text"],
   display: block;
   box-sizing: border-box;
   font-size: 14px;
-  width: 100%;
+  width: 90%;
   padding: 12px 20px;
-  margin: 15px 0;
+  margin: 15px auto;
   border: 1px solid var(--tg-theme-link-color, #000);
   background-color: var(--tg-theme-bg-color, #ffffff);
   border-radius: 4px;

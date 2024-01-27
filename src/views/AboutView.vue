@@ -1,138 +1,129 @@
-<template></template>
+<template>
+  <main>
+    <button class="btn" @click="setBackgroundColor('gray')">
+      setBackgroundColor
+    </button>
+    <button class="btn btn-primary">btn-primary</button>
+    <button class="close_btn">close_btn</button>
+    <button class="btn" @click="tg.requestContact()">requestContact</button>
+    <button class="btn" @click="tg.showAlert('Salom!')">showAlert</button>
+    <button class="btn" @click="tg.showConfirm('Ishonchingiz komilmi?')">
+      showConfirm
+    </button>
+    <button class="btn" @click="tg.requestWriteAccess()">
+      requestWriteAccess
+    </button>
+    <button class="btn" @click="tg.showPopup()">showPopup</button>
+    <button class="btn" @click="showScanQrPopup()">showScanQrPopup</button>
+    <button class="btn" @click="tg.showScanQrPopup(true)">
+      showScanQrPopup(true)
+    </button>
 
-<script setup></script>
+    <form :model="form" class="form">
+      <input v-model="form.name" type="text" class="input" placeholder="Name" />
+      <input v-model="form.age" type="text" class="input" placeholder="Age" />
+      <select v-model="form.region" name="region" id="region" class="select">
+        <option value="fergana">Farg'ona</option>
+        <option value="andijon">Andijon</option>
+        <option value="namangan">Namangan</option>
+      </select>
+    </form>
+  </main>
+</template>
 
-<style>
-body {
-  --bg-color: var(--tg-theme-bg-color, #fff);
-  font-family: sans-serif;
-  background-color: var(--bg-color);
-  color: var(--tg-theme-text-color, #222);
-  font-size: 14px;
-  margin: 0;
-  padding: 0;
-  color-scheme: var(--tg-color-scheme);
-}
+<script setup>
+// https://habr.com/ru/articles/666278/          // <====bu tg class veribl lar
 
-body.gray {
-  background-color: var(--tg-theme-secondary-bg-color, #efefef);
-}
+import { ref, watchEffect } from "vue";
 
-.title {
-  margin: 1rem auto;
-  width: 90%;
-  font-size: 1.5rem;
-  /* text-align: center; */
-}
-a {
-  color: var(--tg-theme-link-color, #2678b6);
-  border: 1px solid var(--tg-theme-link-color, #000);
-  margin-right: 10px;
-}
-.btn {
-  font-size: 14px;
-  padding: 10px 17px;
-}
+const tg = window.Telegram.WebApp;
 
-.btn-primary {
-  background-color: var(--tg-theme-button-color, #50a8eb);
-  color: var(--tg-theme-button-text-color, #fff);
-  border: none;
-}
+const form = ref({
+  name: "",
+  age: "",
+  region: "",
+});
+// const showScanQrPopup = async () => {
+// tg.showScanQrPopup(params)
+// .then((qrText) => {
+//   console.log('QR-kod matni:', qrText);
 
-button {
+//   if (callback) {
+//     const shouldClosePopup = callback(qrText);
+
+//     if (shouldClosePopup) {
+//       console.log('Pop-upni yopish');
+//       tg.closePopup();
+//     }
+//   }
+// })
+// .catch((error) => {
+//   console.error('QR-kod skanlashda xato yuz berdi:', error);
+// });
+// };
+
+const showScanQrPopup = async () => {
+  tg.showScanQrPopup(
+    {
+      text: linksOnly ? "ya.ru" : "google.com",
+    },
+    function (text) {
+      if (linksOnly) {
+        const lowerText = text.toString().toLowerCase();
+        if (
+          lowerText.substring(0, 7) === "http://" ||
+          lowerText.substring(0, 8) === "https://"
+        ) {
+          setTimeout(function () {
+            tg.openLink(text);
+          }, 50);
+
+          return true;
+        }
+      } else {
+        tg.showAlert(text);
+
+        return true;
+      }
+    }
+  );
+};
+
+const onSendData = () => {
+  try {
+    tg.sendData(JSON.stringify(form.value));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+watchEffect(() => {
+  try {
+    tg.expand();
+    tg.MainButton.setParams({
+      text: "Tayyor",
+    });
+
+    tg.onEvent("mainButtonClicked", onSendData);
+
+    if (
+      form.value.name == "" ||
+      form.value.age == "" ||
+      form.value.region == ""
+    ) {
+      tg.MainButton.hide();
+    } else {
+      tg.MainButton.show();
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+</script>
+
+<style scoped>
+.input {
   display: block;
-  width: 100%;
-  font-size: 14px;
-  margin: 15px 0;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  background-color: var(--tg-theme-button-color, #50a8eb);
-  color: var(--tg-theme-button-text-color, #ffffff);
-  cursor: pointer;
-}
-
-.main-container {
-  padding: 15px;
-}
-.list-header {
-  text-transform: uppercase;
-  font-size: 0.92em;
-  color: var(--tg-theme-hint-color, #ccc);
-  margin: 0 0 10px;
-}
-
-button[disabled] {
-  opacity: 0.6;
-  cursor: auto;
-  pointer-events: none;
-}
-
-button.close_btn {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 0;
-  margin: 0;
-  padding: 16px 20px;
-  text-transform: uppercase;
-}
-input[type="text"],
-.input[contenteditable] {
-  display: block;
-  box-sizing: border-box;
-  font-size: 14px;
-  width: 100%;
-  padding: 12px 20px;
-  margin: 15px 0;
-  border: 1px solid var(--tg-theme-link-color, #000);
-  background-color: var(--tg-theme-bg-color, #ffffff);
-  border-radius: 4px;
-  color: var(--tg-theme-text-color, #222222);
-  text-align: start;
-}
-
-input[type="text"]::-webkit-input-placeholder {
-  color: var(--tg-theme-hint-color, #ccc);
-}
-
-input[type="text"]::-moz-placeholder {
-  color: var(--tg-theme-hint-color, #ccc);
-}
-
-input[type="text"]:-ms-input-placeholder {
-  color: var(--tg-theme-hint-color, #ccc);
-}
-
-.input[data-placeholder] {
-  position: relative;
-}
-
-.input[data-placeholder]:empty:before {
-  position: absolute;
-  left: 0;
-  right: 0;
-  content: attr(data-placeholder);
-  color: var(--tg-theme-hint-color, #ccc);
-  padding: 0 20px;
-  font-weight: normal;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: -1;
-}
-
-.hint {
-  color: var(--tg-theme-hint-color);
-  margin: auto;
-  margin-bottom: 1rem;
-  width: 90%;
-}
-
-.link {
-  color: var(--tg-theme-link-color);
+  margin-top: 10px;
 }
 </style>
