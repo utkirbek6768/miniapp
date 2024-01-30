@@ -52,12 +52,20 @@ const validCode = async () => {
   try {
     await http
       .post("/valid", {
-        // phone: phone,
+        phone: phone,
         code: code.value,
-        phone: "+998905376768",
       })
       .then((res) => {
-        console.log(res.data.result);
+        if (res.data.result.key) {
+          localStorage.setItem("key", res.data.result.key);
+          router.push("/register");
+        } else if (res.data.result.access_token) {
+          localStorage.setItem(
+            "token",
+            `${res.data.result.token_type} ${res.data.result.access_token}`
+          );
+          router.push("/");
+        }
       })
       .catch((err) => {
         console.log(err);

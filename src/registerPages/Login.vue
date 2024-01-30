@@ -9,13 +9,15 @@
         <input
           type="text"
           class="input"
-          v-maska
-          data-maska="+998 ## ### ## ##"
           v-model="phoneNumber"
           placeholder="+998"
+          v-maska
+          data-maska="+998 ## ### ## ##"
         />
       </form>
-      <button class="btn main_button" @click="sendCode()">OK</button>
+      <button class="btn main_button" :disabled="disabled" @click="sendCode()">
+        OK
+      </button>
     </div>
   </div>
 </template>
@@ -26,26 +28,27 @@ import { ref } from "vue";
 import { vMaska } from "maska";
 import router from "@/router";
 
+const disabled = ref(false);
 const phoneNumber = ref("+998");
 
 const sendCode = async () => {
-  http
-    .post(`/client`, { phone: phoneNumber.value })
-    .then(async (res) => {
-      if (res.data.success) {
-        try {
-          console.log(res.data.result.code);
-          localStorage.setItem("phone", phoneNumber.value);
-          localStorage.setItem("code", res.data.result.code);
-          router.push("/validcode");
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  disabled.value = true;
+  const phone = phoneNumber.value.replace(/[\s\+]/g, "");
+  try {
+    const res = await http.post(`/client`, { phone });
+
+    if (res.data.success) {
+      console.log(res.data.result.code);
+      localStorage.setItem("phone", phone);
+      localStorage.setItem("code", res.data.result.code);
+      router.push("/validcode");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  } finally {
+    // Reset disabled status in both success and error cases
+    disabled.value = false;
+  }
 };
 </script>
 <style scoped></style>
