@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import Login from "../pages/Login.vue";
-import Register from "../pages/Register.vue";
+import Login from "../registerPages/Login.vue";
+import Register from "../registerPages/Register.vue";
 import Abaut from "../views/AboutView.vue";
-import SendSms from "../pages/SendSms.vue";
-import ValidCode from "../pages/ValidCode.vue";
+import SendSms from "../registerPages/SendSms.vue";
+import ValidCode from "../registerPages/ValidCode.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

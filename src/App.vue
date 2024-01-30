@@ -9,21 +9,15 @@ watchEffect(() => {
 </script>
 
 <template>
-  <!-- <header>
-    <div class="wrapper">
-      <div class="title">Title</div>
-      <div class="hint">Qisqacha izoh yozish mumkin</div>
-      <nav>
-        <RouterLink to="/login">Login</RouterLink>
-        <RouterLink to="/register">Register</RouterLink>
-        <RouterLink to="/abaut">Abaut</RouterLink>
-      </nav>
-    </div>
-  </header> -->
-  <RouterView />
+  <div class="wrapper">
+    <RouterView />
+  </div>
 </template>
 
 <style>
+.wrapper {
+  padding: 1.3rem;
+}
 body {
   --bg-color: var(--tg-theme-bg-color, #fff);
   font-family: sans-serif;
@@ -40,19 +34,37 @@ body.gray {
 }
 
 .title {
-  margin: 1rem auto;
-  width: 90%;
-  font-size: 1.5rem;
-  /* text-align: center; */
+  font-family: Inter;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 130%;
+  margin-bottom: 20px;
+  max-width: 280px;
+}
+.hint {
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+  color: var(--tg-theme-hint-color);
+  margin-bottom: 1.3rem;
 }
 a {
   color: var(--tg-theme-link-color, #2678b6);
   border: 1px solid var(--tg-theme-link-color, #000);
-  margin-right: 10px;
+  margin-right: 0.6rem;
+}
+.main_button {
+  position: absolute;
+  bottom: 0rem;
+  left: 1.3rem;
+  width: calc(100% - 2.6rem);
 }
 .btn {
   font-size: 14px;
-  padding: 10px 17px;
+  padding: 1rem;
 }
 
 .btn-primary {
@@ -66,7 +78,7 @@ button {
   width: 100%;
   font-size: 14px;
   margin: 15px 0;
-  padding: 12px 20px;
+  padding: 1rem;
   border: none;
   border-radius: 4px;
   background-color: var(--tg-theme-button-color, #50a8eb);
@@ -100,30 +112,34 @@ button.close_btn {
   padding: 16px 20px;
   text-transform: uppercase;
 }
-input[type="text"],
+input,
 .input[contenteditable] {
   display: block;
   box-sizing: border-box;
-  font-size: 14px;
-  width: 90%;
+  width: 100%;
   padding: 12px 20px;
-  margin: 15px auto;
+  margin: 15px 0px;
   border: 1px solid var(--tg-theme-link-color, #000);
   background-color: var(--tg-theme-bg-color, #ffffff);
   border-radius: 4px;
   color: var(--tg-theme-text-color, #222222);
   text-align: start;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
 }
 
-input[type="text"]::-webkit-input-placeholder {
+input::-webkit-input-placeholder {
   color: var(--tg-theme-hint-color, #ccc);
 }
 
-input[type="text"]::-moz-placeholder {
+input::-moz-placeholder {
   color: var(--tg-theme-hint-color, #ccc);
 }
 
-input[type="text"]:-ms-input-placeholder {
+input:-ms-input-placeholder {
   color: var(--tg-theme-hint-color, #ccc);
 }
 
@@ -144,13 +160,6 @@ input[type="text"]:-ms-input-placeholder {
   overflow: hidden;
   pointer-events: none;
   z-index: -1;
-}
-
-.hint {
-  color: var(--tg-theme-hint-color);
-  margin: auto;
-  margin-bottom: 1rem;
-  width: 90%;
 }
 
 .link {
