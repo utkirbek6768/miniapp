@@ -64,13 +64,11 @@ const sendCode = async () => {
         }
       })
       .catch((err) => {
-        sendMsg(JSON.stringify(err));
+        sendMsg(`so'rov err bilan tugadi${JSON.stringify(err)}`);
       });
   } catch (error) {
     sendMsg(`so'rov error bilan tugadi${JSON.stringify(error)}`);
     console.error("Error:", error);
-  } finally {
-    sendMsg("finally");
     disabled.value = false;
   }
 };
