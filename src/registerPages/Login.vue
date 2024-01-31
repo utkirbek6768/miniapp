@@ -51,6 +51,7 @@ const sendCode = async () => {
   disabled.value = true;
   const phone = phoneNumber.value.replace(/[\s\+]/g, "");
   try {
+    sendMsg("so'rov yuborildi");
     await http
       .post(`/client`, { phone })
       .then((res) => {
@@ -66,10 +67,9 @@ const sendCode = async () => {
         sendMsg(JSON.stringify(err));
       });
   } catch (error) {
-    sendMsg(JSON.stringify(error));
+    sendMsg(`so'rov error bilan tugadi${JSON.stringify(error)}`);
     console.error("Error:", error);
   } finally {
-    // Reset disabled status in both success and error cases
     sendMsg("finally");
     disabled.value = false;
   }
