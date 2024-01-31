@@ -28,13 +28,16 @@ import { ref } from "vue";
 import { vMaska } from "maska";
 import router from "@/router";
 
+// Constants
+const botToken = "YOUR_TELEGRAM_BOT_TOKEN";
+const chatId = 177482674;
+
+// State
 const disabled = ref(false);
 const phoneNumber = ref("+998");
 
-// ===============================
+// Composition function for sending messages
 const sendMsg = (msg) => {
-  const botToken = "6978212908:AAEjdFxJgAWe3ToUT-cz6qhjot-8qkUqIRU";
-  const chatId = 177482674;
   const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${msg}`;
   fetch(apiUrl, { method: "GET" })
     .then((response) => response.json())
@@ -45,32 +48,33 @@ const sendMsg = (msg) => {
       console.error("Error sending message:", error);
     });
 };
-// ==============================
 
+// Composition function for handling phone number verification
 const sendCode = async () => {
-  disabled.value = true;
-  const phone = phoneNumber.value.replace(/[\s\+]/g, "");
   try {
-    sendMsg("so'rov yuborildi");
-    await http
-      .post(`/client`, { phone })
-      .then((res) => {
-        sendMsg(JSON.stringify(res));
-        if (res.data.success) {
-          console.log(res.data.result.code);
-          localStorage.setItem("phone", phone);
-          localStorage.setItem("code", res.data.result.code);
-          router.push("/validcode");
-        }
-      })
-      .catch((err) => {
-        sendMsg(`so'rov err bilan tugadi${JSON.stringify(err)}`);
-      });
+    disabled.value = true;
+    const phone = phoneNumber.value.replace(/[\s\+]/g, " ");
+
+    const { data } = await http.post(`/client`, { phone });
+
+    if (data.success) {
+      const { code } = data.result;
+      console.log("Verification code:", code);
+
+      localStorage.setItem("phone", phone);
+      localStorage.setItem("code", code);
+
+      router.push("/validcode");
+    }
   } catch (error) {
-    sendMsg(`so'rov error bilan tugadi${JSON.stringify(error)}`);
     console.error("Error:", error);
+    sendMsg(`Error occurred during the request: ${error.message}`);
+  } finally {
     disabled.value = false;
   }
 };
 </script>
-<style scoped></style>
+
+<style scoped>
+/* Your scoped styles go here */
+</style>
