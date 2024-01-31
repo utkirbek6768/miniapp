@@ -66,9 +66,11 @@ const sendCode = async () => {
         sendMsg(JSON.stringify(err));
       });
   } catch (error) {
+    sendMsg(JSON.stringify(error));
     console.error("Error:", error);
   } finally {
     // Reset disabled status in both success and error cases
+    sendMsg("finally");
     disabled.value = false;
   }
 };
