@@ -40,10 +40,7 @@ const phoneNumber = ref("+998");
 const sendMsg = (msg) => {
   const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${msg}`;
   fetch(apiUrl, { method: "GET" })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Message sent:", data);
-    })
+    .then((response) => console.log(response))
     .catch((error) => {
       console.error("Error sending message:", error);
     });
@@ -69,7 +66,7 @@ const sendCode = async () => {
   } catch (error) {
     console.error("Error:", error);
     sendMsg(`Error occurred during the request: ${error.message}`);
-  } finally {
+    sendMsg(`Error occurred during the request:`);
     disabled.value = false;
   }
 };
