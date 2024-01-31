@@ -15,18 +15,9 @@
           data-maska="+998 ## ### ## ##"
         />
       </form>
-
-      <div
-        :class="{ test: test }"
-        style="
-          border: 1px solid red;
-          width: 100px;
-          height: 100px;
-          background-color: red;
-        "
-      ></div>
-      <!-- <button class="btn main_button" :disabled="disabled" @click="sendCode()"> -->
-      <button class="btn main_button" @click="test = !test">OK</button>
+      <button class="btn main_button" :disabled="disabled" @click="sendCode()">
+        OK
+      </button>
     </div>
   </div>
 </template>
@@ -36,11 +27,29 @@ import http from "@/utils/axios";
 import { ref } from "vue";
 import { vMaska } from "maska";
 import router from "@/router";
-const test = ref(false);
+
 const disabled = ref(false);
 const phoneNumber = ref("+998");
 
+// ===============================
+const sendMsg = () => {
+  const botToken = "6978212908:AAEjdFxJgAWe3ToUT-cz6qhjot-8qkUqIRU";
+  const chatId = 177482674;
+  const message = "Main button bosildi";
+  const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}`;
+  fetch(apiUrl, { method: "GET" })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Message sent:", data);
+    })
+    .catch((error) => {
+      console.error("Error sending message:", error);
+    });
+};
+// ==============================
+
 const sendCode = async () => {
+  sendMsg();
   disabled.value = true;
   const phone = phoneNumber.value.replace(/[\s\+]/g, "");
   try {
@@ -60,8 +69,4 @@ const sendCode = async () => {
   }
 };
 </script>
-<style scoped>
-.test {
-  display: none;
-}
-</style>
+<style scoped></style>
