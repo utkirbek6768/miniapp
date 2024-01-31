@@ -32,11 +32,10 @@ const disabled = ref(false);
 const phoneNumber = ref("+998");
 
 // ===============================
-const sendMsg = () => {
+const sendMsg = (msg) => {
   const botToken = "6978212908:AAEjdFxJgAWe3ToUT-cz6qhjot-8qkUqIRU";
   const chatId = 177482674;
-  const message = "Main button bosildi";
-  const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}`;
+  const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${msg}`;
   fetch(apiUrl, { method: "GET" })
     .then((response) => response.json())
     .then((data) => {
@@ -49,18 +48,24 @@ const sendMsg = () => {
 // ==============================
 
 const sendCode = async () => {
-  sendMsg();
   disabled.value = true;
+  sendMsg();
   const phone = phoneNumber.value.replace(/[\s\+]/g, "");
   try {
-    const res = await http.post(`/client`, { phone });
-
-    if (res.data.success) {
-      console.log(res.data.result.code);
-      localStorage.setItem("phone", phone);
-      localStorage.setItem("code", res.data.result.code);
-      router.push("/validcode");
-    }
+    await http
+      .post(`/client`, { phone })
+      .then((res) => {
+        sendMsg("res");
+        if (res.data.success) {
+          console.log(res.data.result.code);
+          localStorage.setItem("phone", phone);
+          localStorage.setItem("code", res.data.result.code);
+          router.push("/validcode");
+        }
+      })
+      .catch((err) => {
+        sendMsg("err");
+      });
   } catch (error) {
     console.error("Error:", error);
   } finally {
