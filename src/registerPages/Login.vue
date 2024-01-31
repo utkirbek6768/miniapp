@@ -15,9 +15,18 @@
           data-maska="+998 ## ### ## ##"
         />
       </form>
-      <button class="btn main_button" :disabled="disabled" @click="sendCode()">
-        OK
-      </button>
+
+      <div
+        :class="{ test: test }"
+        style="
+          border: 1px solid red;
+          width: 100px;
+          height: 100px;
+          background-color: red;
+        "
+      ></div>
+      <!-- <button class="btn main_button" :disabled="disabled" @click="sendCode()"> -->
+      <button class="btn main_button" @click="test = !test">OK</button>
     </div>
   </div>
 </template>
@@ -27,7 +36,7 @@ import http from "@/utils/axios";
 import { ref } from "vue";
 import { vMaska } from "maska";
 import router from "@/router";
-
+const test = ref(false);
 const disabled = ref(false);
 const phoneNumber = ref("+998");
 
@@ -51,4 +60,8 @@ const sendCode = async () => {
   }
 };
 </script>
-<style scoped></style>
+<style scoped>
+.test {
+  display: none;
+}
+</style>
