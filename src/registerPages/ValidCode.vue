@@ -60,10 +60,7 @@ const validCode = async () => {
           localStorage.setItem("key", res.data.result.key);
           router.push("/register");
         } else if (res.data.result.access_token) {
-          localStorage.setItem(
-            "token",
-            `${res.data.result.token_type} ${res.data.result.access_token}`
-          );
+          localStorage.setItem("token", res.data.result.access_token);
           router.push("/");
         }
       })

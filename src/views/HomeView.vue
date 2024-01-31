@@ -32,7 +32,7 @@ const issetToken = async () => {
   try {
     const token = localStorage.getItem("token");
     if (token) {
-      getMe();
+      //   getMe();
     } else {
       router.push("/login");
     }
