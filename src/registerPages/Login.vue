@@ -54,7 +54,7 @@ const sendCode = async () => {
     await http
       .post(`/client`, { phone })
       .then((res) => {
-        sendMsg("res");
+        sendMsg(JSON.stringify(res));
         if (res.data.success) {
           console.log(res.data.result.code);
           localStorage.setItem("phone", phone);
@@ -63,7 +63,7 @@ const sendCode = async () => {
         }
       })
       .catch((err) => {
-        sendMsg(err);
+        sendMsg(JSON.stringify(err));
       });
   } catch (error) {
     console.error("Error:", error);
