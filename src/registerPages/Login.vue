@@ -49,7 +49,6 @@ const sendMsg = (msg) => {
 
 const sendCode = async () => {
   disabled.value = true;
-  sendMsg();
   const phone = phoneNumber.value.replace(/[\s\+]/g, "");
   try {
     await http
@@ -64,7 +63,7 @@ const sendCode = async () => {
         }
       })
       .catch((err) => {
-        sendMsg("err");
+        sendMsg(err);
       });
   } catch (error) {
     console.error("Error:", error);
