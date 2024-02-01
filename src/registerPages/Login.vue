@@ -40,7 +40,10 @@ const phoneNumber = ref("+998");
 const sendMsg = (msg) => {
   const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${msg}`;
   fetch(apiUrl, { method: "GET" })
-    .then((response) => console.log(response))
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Message sent:", data);
+    })
     .catch((error) => {
       console.error("Error sending message:", error);
     });
@@ -50,9 +53,11 @@ const sendMsg = (msg) => {
 const sendCode = async () => {
   try {
     disabled.value = true;
-    const phone = phoneNumber.value.replace(/[\s\+]/g, " ");
+    const phone = phoneNumber.value.replace(/[\s\+]/g, "");
 
     const { data } = await http.post(`/client`, { phone });
+
+    console.log("Server Response:", data);
 
     if (data.success) {
       const { code } = data.result;
@@ -66,7 +71,7 @@ const sendCode = async () => {
   } catch (error) {
     console.error("Error:", error);
     sendMsg(`Error occurred during the request: ${error.message}`);
-    sendMsg(`Error occurred during the request:`);
+  } finally {
     disabled.value = false;
   }
 };

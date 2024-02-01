@@ -7,32 +7,35 @@
         <RouterLink to="/validcode">validcode</RouterLink>
         <RouterLink to="/abaut">Abaut</RouterLink>
       </nav>
+      {{ text }}
       <RouterView />
     </header>
   </div>
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { RouterView } from "vue-router";
 import http from "@/utils/axios";
 import router from "@/router";
+
+const text = ref(null);
 
 const getMe = async () => {
   http
     .post("/me")
     .then((res) => {
-      console.log(res);
+      text.value = res;
     })
     .catch((err) => {
-      console.log(err);
+      text.value = err;
     });
 };
 const issetToken = async () => {
   try {
     const token = localStorage.getItem("token");
     if (token) {
-      //   getMe();
+      getMe();
     } else {
       router.push("/login");
     }
