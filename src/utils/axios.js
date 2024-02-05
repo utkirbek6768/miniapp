@@ -34,7 +34,7 @@ http.interceptors.response.use(
     let response = error.response;
 
     if (response && response.status == 401) {
-      router.push("/login");
+      router.push("/");
     }
     return Promise.reject(response);
   }
