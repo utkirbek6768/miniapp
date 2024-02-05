@@ -7,29 +7,17 @@
         <RouterLink to="/validcode">validcode</RouterLink>
         <RouterLink to="/abaut">Abaut</RouterLink>
       </nav>
-      {{ text }}
       <RouterView />
     </header>
-    <button @click="reqresIn()">ReqresIn</button>
+    <button @click="reqresIn()">Reqres In</button>
     <button @click="yalla()">YALLA</button>
-    <button @click="yalla1()">YALLA1</button>
-    <button @click="yalla2()">YALLA2</button>
+    <div><span>buyerdaman ========> </span> {{ data }}</div>
     <div class="tarifs">
       <swiper :slidesPerView="3" :spaceBetween="10" class="mySwiper">
         <swiper-slide class="mySlide">Slide 1</swiper-slide>
-        <swiper-slide class="mySlide">Slide 1</swiper-slide>
-        <swiper-slide class="mySlide">Slide 1</swiper-slide>
-        <swiper-slide class="mySlide">Slide 1</swiper-slide>
-        <swiper-slide class="mySlide">Slide 1</swiper-slide>
-        <swiper-slide class="mySlide">Slide 1</swiper-slide>
-        <swiper-slide class="mySlide">Slide 1</swiper-slide>
-        <swiper-slide class="mySlide">Slide 1</swiper-slide>
-        <swiper-slide class="mySlide">Slide 1</swiper-slide>
-        <swiper-slide class="mySlide">Slide 1</swiper-slide>
-        <swiper-slide class="mySlide">Slide 1</swiper-slide>
-        <swiper-slide class="mySlide">Slide 1</swiper-slide>
-        <swiper-slide class="mySlide">Slide 1</swiper-slide>
-        <swiper-slide class="mySlide">Slide 1</swiper-slide>
+        <swiper-slide class="mySlide">Slide 2</swiper-slide>
+        <swiper-slide class="mySlide">Slide 3</swiper-slide>
+        <swiper-slide class="mySlide">Slide 4</swiper-slide>
       </swiper>
     </div>
   </div>
@@ -44,6 +32,8 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 
 const text = ref(null);
+const data = ref(null);
+const dataJson = ref("");
 
 const reqresIn = () => {
   const apiUrl = `https://reqres.in/api/users`;
@@ -55,8 +45,10 @@ const reqresIn = () => {
     },
   })
     .then((res) => {
+      data.value = res.url;
       const response = JSON.stringify(res);
-      sendMsg(`bu res req ${response}`);
+      dataJson.value = response;
+      sendMsg(`bu res req ${res.url}`);
       console.log("bu data:", res);
     })
     .catch((error) => {
@@ -80,53 +72,12 @@ const yalla = () => {
   })
     .then((res) => {
       const response = JSON.stringify(res);
-      sendMsg(`bu res yalla${response}`);
+      sendMsg(response);
+      console.log(res);
     })
     .catch((error) => {
       const err = JSON.stringify(error);
       sendMsg(`bu error yalla${err}`);
-    });
-};
-const yalla1 = () => {
-  const apiUrl = `http://api.ildam.uz:1701/cli/client`;
-  fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      phone: "998905376768",
-    }),
-  })
-    .then((res) => {
-      const response = JSON.stringify(res);
-      sendMsg(`bu res yalla1 ${response}`);
-    })
-    .catch((error) => {
-      const err = JSON.stringify(error);
-      sendMsg(`bu error yalla1 ${err}`);
-    });
-};
-
-const yalla2 = () => {
-  const apiUrl = `http://ildam-api.loc/client`;
-  fetch(apiUrl, {
-    method: "POST",
-    "brand-id": "2",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      phone: "998905376768",
-    }),
-  })
-    .then((res) => {
-      const response = JSON.stringify(res);
-      sendMsg(`bu res yalla2${response}`);
-    })
-    .catch((error) => {
-      const err = JSON.stringify(error);
-      sendMsg(`bu error yalla2 ${err}`);
     });
 };
 
@@ -136,9 +87,8 @@ const sendMsg = (msg) => {
   const chatId = 177482674;
   const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${msg}`;
   fetch(apiUrl, { method: "GET" })
-    .then((response) => response.json())
     .then((data) => {
-      console.log("Message sent:", data);
+      console.log("bu sendMsg dagi console:", data);
     })
     .catch((error) => {
       console.error("Error sending message:", error);
