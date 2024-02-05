@@ -29,7 +29,7 @@ import { vMaska } from "maska";
 import router from "@/router";
 
 // Constants
-const botToken = "YOUR_TELEGRAM_BOT_TOKEN";
+const botToken = "6978212908:AAEjdFxJgAWe3ToUT-cz6qhjot-8qkUqIRU";
 const chatId = 177482674;
 
 // State

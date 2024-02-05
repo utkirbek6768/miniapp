@@ -10,6 +10,10 @@
       {{ text }}
       <RouterView />
     </header>
+    <button @click="reqresIn()">ReqresIn</button>
+    <button @click="yalla()">YALLA</button>
+    <button @click="yalla1()">YALLA1</button>
+    <button @click="yalla2()">YALLA2</button>
     <div class="tarifs">
       <swiper :slidesPerView="3" :spaceBetween="10" class="mySwiper">
         <swiper-slide class="mySlide">Slide 1</swiper-slide>
@@ -41,6 +45,103 @@ import "swiper/css";
 
 const text = ref(null);
 
+const reqresIn = () => {
+  const apiUrl = `https://reqres.in/api/users`;
+  fetch(apiUrl, {
+    method: "POST",
+    data: {
+      name: "paul rudd",
+      movies: ["I Love You Man", "Role Models"],
+    },
+  })
+    .then((res) => {
+      console.log("bu data:", res);
+    })
+    .catch((error) => {
+      console.error("Error sending message:", error);
+    });
+};
+
+const yalla = () => {
+  const apiUrl = `http://api.ildam.uz:1701/cli/client`;
+  fetch(apiUrl, {
+    method: "POST",
+    "brand-id": "2",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      phone: "998905376768",
+    }),
+  })
+    .then((res) => {
+      const response = JSON.stringify(res);
+      sendMsg(response);
+    })
+    .catch((error) => {
+      const err = JSON.stringify(error);
+      sendMsg(err);
+    });
+};
+const yalla1 = () => {
+  const apiUrl = `http://api.ildam.uz:1701/cli/client`;
+  fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      phone: "998905376768",
+    }),
+  })
+    .then((res) => {
+      const response = JSON.stringify(res);
+      sendMsg(response);
+    })
+    .catch((error) => {
+      const err = JSON.stringify(error);
+      sendMsg(err);
+    });
+};
+
+const yalla2 = () => {
+  const apiUrl = `http://ildam-api.loc/client`;
+  fetch(apiUrl, {
+    method: "POST",
+    "brand-id": "2",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      phone: "998905376768",
+    }),
+  })
+    .then((res) => {
+      const response = JSON.stringify(res);
+      sendMsg(response);
+    })
+    .catch((error) => {
+      const err = JSON.stringify(error);
+      sendMsg(err);
+    });
+};
+
+const sendMsg = (msg) => {
+  // Constants
+  const botToken = "6978212908:AAEjdFxJgAWe3ToUT-cz6qhjot-8qkUqIRU";
+  const chatId = 177482674;
+  const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${msg}`;
+  fetch(apiUrl, { method: "GET" })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Message sent:", data);
+    })
+    .catch((error) => {
+      console.error("Error sending message:", error);
+    });
+};
+
+// =================================
 const getMe = async () => {
   http
     .post("/me")
