@@ -158,7 +158,7 @@ const issetToken = async () => {
     if (token) {
       getMe();
     } else {
-      router.push("/login");
+      router.push("/");
     }
     console.log(token ? token : "token topilmadi");
   } catch (error) {
