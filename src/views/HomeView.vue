@@ -55,9 +55,13 @@ const reqresIn = () => {
     },
   })
     .then((res) => {
+      const response = JSON.stringify(res);
+      sendMsg(`bu res req ${response}`);
       console.log("bu data:", res);
     })
     .catch((error) => {
+      const err = JSON.stringify(error);
+      sendMsg(err);
       console.error("Error sending message:", error);
     });
 };
@@ -76,11 +80,11 @@ const yalla = () => {
   })
     .then((res) => {
       const response = JSON.stringify(res);
-      sendMsg(response);
+      sendMsg(`bu res yalla${response}`);
     })
     .catch((error) => {
       const err = JSON.stringify(error);
-      sendMsg(err);
+      sendMsg(`bu error yalla${err}`);
     });
 };
 const yalla1 = () => {
@@ -96,11 +100,11 @@ const yalla1 = () => {
   })
     .then((res) => {
       const response = JSON.stringify(res);
-      sendMsg(response);
+      sendMsg(`bu res yalla1 ${response}`);
     })
     .catch((error) => {
       const err = JSON.stringify(error);
-      sendMsg(err);
+      sendMsg(`bu error yalla1 ${err}`);
     });
 };
 
@@ -118,11 +122,11 @@ const yalla2 = () => {
   })
     .then((res) => {
       const response = JSON.stringify(res);
-      sendMsg(response);
+      sendMsg(`bu res yalla2${response}`);
     })
     .catch((error) => {
       const err = JSON.stringify(error);
-      sendMsg(err);
+      sendMsg(`bu error yalla2 ${err}`);
     });
 };
 
