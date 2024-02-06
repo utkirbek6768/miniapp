@@ -83,6 +83,8 @@ const yalla = () => {
       const err = JSON.stringify(error);
       sendMsg(`Bu xatolik: ${err}`);
       sendMsg(JSON.stringify(error));
+      sendMsg(err);
+      sendMsg(error);
     });
 };
 
