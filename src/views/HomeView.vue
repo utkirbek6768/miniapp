@@ -58,27 +58,54 @@ const reqresIn = () => {
     });
 };
 
+// const yalla = () => {
+//   const apiUrl = `http://api.ildam.uz:1701/cli/client`;
+//   fetch(apiUrl, {
+//     method: "POST",
+//     "brand-id": "2",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       phone: "998905376768",
+//     }),
+//   })
+//     .then((res) => {
+//       data.value = res.url;
+//       const response = JSON.stringify(res);
+//       sendMsg(response);
+//       console.log(res);
+//     })
+//     .catch((error) => {
+//       data.value = error.message;
+//       const err = JSON.stringify(error);
+//       sendMsg(`bu error yalla${err}`);
+//     });
+// };
 const yalla = () => {
   const apiUrl = `http://api.ildam.uz:1701/cli/client`;
   fetch(apiUrl, {
     method: "POST",
-    "brand-id": "2",
     headers: {
       "Content-Type": "application/json",
+      "brand-id": "2",
     },
     body: JSON.stringify({
       phone: "998905376768",
     }),
   })
-    .then((res) => {
-      data.value = res.url;
-      const response = JSON.stringify(res);
+    .then(async (res) => {
+      data.value = await res.json();
+    })
+    .then((data) => {
+      const response = JSON.stringify(data);
       sendMsg(response);
-      console.log(res);
+      console.log(data);
     })
     .catch((error) => {
+      data.value = error;
       const err = JSON.stringify(error);
-      sendMsg(`bu error yalla${err}`);
+      sendMsg(`Bu xatolik: ${err}`);
     });
 };
 
