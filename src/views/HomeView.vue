@@ -71,6 +71,7 @@ const yalla = () => {
     }),
   })
     .then((res) => {
+      data.value = res.url;
       const response = JSON.stringify(res);
       sendMsg(response);
       console.log(res);
@@ -82,10 +83,7 @@ const yalla = () => {
 };
 
 const sendMsg = (msg) => {
-  // Constants
-  const botToken = "6978212908:AAEjdFxJgAWe3ToUT-cz6qhjot-8qkUqIRU";
-  const chatId = 177482674;
-  const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${msg}`;
+  const apiUrl = `https://api.telegram.org/bot6978212908:AAEjdFxJgAWe3ToUT-cz6qhjot-8qkUqIRU/sendMessage?chat_id=177482674&text=${msg}`;
   fetch(apiUrl, { method: "GET" })
     .then((data) => {
       console.log("bu sendMsg dagi console:", data);
