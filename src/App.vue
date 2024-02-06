@@ -55,6 +55,13 @@ a {
   color: var(--tg-theme-link-color, #2678b6);
   border: 1px solid var(--tg-theme-link-color, #000);
   margin-right: 0.6rem;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+a:hover {
+  background-color: var(--tg-theme-secondary-bg-color, #2678b6);
+  color: #fff;
 }
 .main_button {
   position: absolute;
