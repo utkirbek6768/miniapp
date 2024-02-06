@@ -9,9 +9,9 @@
       </nav>
       <RouterView />
     </header>
-    <button @click="reqresIn()">Reqres In</button>
-    <button @click="yalla()">YALLA</button>
-    <div><span>buyerdaman ========> </span> {{ data }}</div>
+    <button @click="reqresIn()">HTTPS api</button>
+    <button @click="yalla()">HTTP api</button>
+    <div><span>Response ========> </span> {{ data }}</div>
     <div class="tarifs">
       <swiper :slidesPerView="3" :spaceBetween="10" class="mySwiper">
         <swiper-slide class="mySlide">Slide 1</swiper-slide>
