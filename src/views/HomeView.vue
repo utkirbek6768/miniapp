@@ -58,30 +58,6 @@ const reqresIn = () => {
     });
 };
 
-// const yalla = () => {
-//   const apiUrl = `http://api.ildam.uz:1701/cli/client`;
-//   fetch(apiUrl, {
-//     method: "POST",
-//     "brand-id": "2",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//       phone: "998905376768",
-//     }),
-//   })
-//     .then((res) => {
-//       data.value = res.url;
-//       const response = JSON.stringify(res);
-//       sendMsg(response);
-//       console.log(res);
-//     })
-//     .catch((error) => {
-//       data.value = error.message;
-//       const err = JSON.stringify(error);
-//       sendMsg(`bu error yalla${err}`);
-//     });
-// };
 const yalla = () => {
   const apiUrl = `http://api.ildam.uz:1701/cli/client`;
   fetch(apiUrl, {
@@ -106,7 +82,7 @@ const yalla = () => {
       data.value = error;
       const err = JSON.stringify(error);
       sendMsg(`Bu xatolik: ${err}`);
-      sendMsg(error);
+      sendMsg(JSON.stringify(error));
     });
 };
 
@@ -163,7 +139,9 @@ onMounted(async () => {
   height: 100%;
 }
 .tarifs .mySwiper .mySlide {
-  border: 1px solid blue;
+  border: 1px solid var(--tg-theme-link-color, #000);
+  background-color: var(--tg-theme-bg-color, #ffffffd9);
+  color: var(--tg-theme-text-color, #222222);
   border-radius: 0.6rem;
   height: 98%;
   display: flex;
