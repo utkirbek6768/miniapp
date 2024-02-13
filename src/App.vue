@@ -16,9 +16,10 @@ watchEffect(() => {
 
 <style>
 .wrapper {
-  padding: 1.3rem;
+  height: 100%;
 }
 body {
+  height: var(--tg-viewport-stable-height);
   --bg-color: var(--tg-theme-bg-color, #fff);
   font-family: sans-serif;
   background-color: var(--bg-color);

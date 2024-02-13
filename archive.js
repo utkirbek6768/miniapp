@@ -84,96 +84,96 @@
 // 	  });
 //   };
 ///////=============tg.function()========================================
-// const tg = window.Telegram.WebApp;
-// tg.close();
-// tg.init();
-// tg.expand();
-// tg.ready();
-// tg.showAlert(text);
-// tg.openLink("https://ya.ru");
-// tg.setHeaderColor("secondary_bg_color");
-// tg.checkInitData();
-// tg.onEvent("themeChanged", function () {});
-// tg.onEvent("viewportChanged", function () {});
-// tg.onEvent("settingsButtonClicked", function () {
-//   tg.alert("Settings opened!");
-// });
-// tg.showConfirm(message);
-// tg.setBackgroundColor("gray");
-// tg.MainButton.showProgress();
-// tg.MainButton.hideProgress();
-// Telegram.WebApp.MainButton.setParams({
-//   text: "main button closed",
-//   is_visible: true,
-// }).onClick(tg.close());
-// tg.setHeaderColor("secondary_bg_color");
-// tg.testClipboard(document.getElementById("clipboard_test"));
-// tg.showScanQrPopup(
-//   {
-//     text: linksOnly ? "with any link" : "for test purposes",
-//   },
-//   function (text) {
-//     if (linksOnly) {
-//       const lowerText = text.toString().toLowerCase();
-//       if (
-//         lowerText.substring(0, 7) === "http://" ||
-//         lowerText.substring(0, 8) === "https://"
-//       ) {
-//         setTimeout(function () {
-//           tg.openLink(text);
-//         }, 50);
+const tg = window.Telegram.WebApp;
+tg.close();
+tg.init();
+tg.expand();
+tg.ready();
+tg.showAlert(text);
+tg.openLink("https://ya.ru");
+tg.setHeaderColor("secondary_bg_color");
+tg.checkInitData();
+tg.onEvent("themeChanged", function () {});
+tg.onEvent("viewportChanged", function () {});
+tg.onEvent("settingsButtonClicked", function () {
+  tg.alert("Settings opened!");
+});
+tg.showConfirm(message);
+tg.setBackgroundColor("gray");
+tg.MainButton.showProgress();
+tg.MainButton.hideProgress();
+Telegram.WebApp.MainButton.setParams({
+  text: "main button closed",
+  is_visible: true,
+}).onClick(tg.close());
+tg.setHeaderColor("secondary_bg_color");
+tg.testClipboard(document.getElementById("clipboard_test"));
+tg.showScanQrPopup(
+  {
+    text: linksOnly ? "with any link" : "for test purposes",
+  },
+  function (text) {
+    if (linksOnly) {
+      const lowerText = text.toString().toLowerCase();
+      if (
+        lowerText.substring(0, 7) === "http://" ||
+        lowerText.substring(0, 8) === "https://"
+      ) {
+        setTimeout(function () {
+          tg.openLink(text);
+        }, 50);
 
-//         return true;
-//       }
-//     } else {
-//       tg.showAlert(text);
+        return true;
+      }
+    } else {
+      tg.showAlert(text);
 
-//       return true;
-//     }
-//   }
-// );
+      return true;
+    }
+  }
+);
 
-// tg.requestContact(function (result) {
-//   if (result) {
-//     DemoApp.showAlert("Contact granted");
-//   } else {
-//     DemoApp.showAlert("Contact denied");
-//   }
-// });
+tg.requestContact(function (result) {
+  if (result) {
+    DemoApp.showAlert("Contact granted");
+  } else {
+    DemoApp.showAlert("Contact denied");
+  }
+});
 
-// tg.showPopup(
-//   {
-//     title: "Popup title",
-//     message: "Popup message",
-//     buttons: [
-//       { id: "delete", type: "destructive", text: "Delete all" },
-//       { id: "faq", type: "default", text: "Open FAQ" },
-//       { type: "cancel" },
-//     ],
-//   },
-//   function (buttonId) {
-//     if (buttonId === "delete") {
-//       tg.showAlert("'Delete all' selected");
-//     } else if (buttonId === "faq") {
-//       tg.openLink("https://telegram.org/faq");
-//     }
-//   }
-// );
+tg.showPopup(
+  {
+    title: "Popup title",
+    message: "Popup message",
+    buttons: [
+      { id: "delete", type: "destructive", text: "Delete all" },
+      { id: "faq", type: "default", text: "Open FAQ" },
+      { type: "cancel" },
+    ],
+  },
+  function (buttonId) {
+    if (buttonId === "delete") {
+      tg.showAlert("'Delete all' selected");
+    } else if (buttonId === "faq") {
+      tg.openLink("https://telegram.org/faq");
+    }
+  }
+);
 
-// tg.requestWriteAccess(function (result) {
-//   if (result) {
-//     tg.showAlert("Write access granted");
-//   } else {
-//     tg.showAlert("Write access denied");
-//   }
-// });
+tg.requestWriteAccess(function (result) {
+  if (result) {
+    tg.showAlert("Write access granted");
+  } else {
+    tg.showAlert("Write access denied");
+  }
+});
 
-// tg.sendData(new Date().toString());
+tg.sendData(new Date().toString());
 
-// tg.apiRequest("checkInitData", {}, function (result) {
-//   if (result.ok) {
-//     console.log(result);
-//   } else {
-//     console.log("else error");
-//   }
-// });
+tg.apiRequest("checkInitData", {}, function (result) {
+  if (result.ok) {
+    console.log(result);
+  } else {
+    console.log("else error");
+  }
+});

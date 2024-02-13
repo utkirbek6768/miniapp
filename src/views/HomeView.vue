@@ -1,17 +1,39 @@
 <template>
   <div class="home_wrapper">
-    <header>
-      <nav>
-        <RouterLink to="/login">Login</RouterLink>
-        <RouterLink to="/register">Register</RouterLink>
-        <RouterLink to="/validcode">validcode</RouterLink>
-        <RouterLink to="/abaut">Abaut</RouterLink>
-      </nav>
-      <RouterView />
-    </header>
-    <button @click="reqresIn()">HTTPS api</button>
-    <button @click="yalla()">HTTP api</button>
-    <div><span>Response ========> </span> {{ data }}</div>
+    <div class="header_wrapper">
+      <header>
+        <nav>
+          <RouterLink to="/login">Login</RouterLink>
+          <RouterLink to="/register">Register</RouterLink>
+          <RouterLink to="/validcode">validcode</RouterLink>
+          <RouterLink to="/abaut">Abaut</RouterLink>
+        </nav>
+        <RouterView />
+      </header>
+      <button @click="reqresIn()">HTTPS api</button>
+      <button @click="yalla()">HTTP api</button>
+      <div><span>Response ========> </span> {{ data }}</div>
+    </div>
+    <div class="map_container">
+      <GMapMap
+        :center="center"
+        :zoom="15"
+        map-type-id="terrain"
+        style="width: 100%; height: 100%"
+      >
+        <GMapCluster>
+          <GMapMarker
+            :key="index"
+            v-for="(m, index) in markers"
+            :position="m.position"
+            :clickable="true"
+            :draggable="true"
+            @click="center = m.position"
+          />
+        </GMapCluster>
+      </GMapMap>
+    </div>
+
     <div class="tarifs">
       <swiper :slidesPerView="3" :spaceBetween="10" class="mySwiper">
         <swiper-slide class="mySlide">Slide 1</swiper-slide>
@@ -30,6 +52,17 @@ import http from "@/utils/axios";
 import router from "@/router";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
+
+const center = ref({ lat: 51.093048, lng: 6.84212 });
+
+const markers = ref([
+  {
+    position: {
+      lat: 51.093048,
+      lng: 6.84212,
+    },
+  },
+]);
 
 const text = ref(null);
 const data = ref(null);
@@ -127,6 +160,25 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.home_wrapper {
+  height: 100%;
+}
+.map_container {
+  height: 100%;
+}
+.header_wrapper {
+  width: calc(100% - 2.6rem);
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 1.3rem;
+  z-index: 3;
+  background-color: var(--tg-theme-bg-color, rgba(255, 245, 245, 0.5));
+}
+.vue-map-container {
+  height: inherit;
+}
+
 .tarifs {
   width: 100%;
   height: 100px;

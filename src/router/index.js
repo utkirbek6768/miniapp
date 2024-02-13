@@ -13,17 +13,7 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: HomeView,
-      children: [
-        {
-          path: "/abaut",
-          component: Abaut,
-          meta: {
-            permission: "all",
-            title: "Biz haqimizda",
-            pageName: "abaut",
-          },
-        },
-      ],
+      children: [],
     },
 
     {
@@ -45,6 +35,15 @@ const router = createRouter({
       path: "/validcode",
       name: "validcode",
       component: ValidCode,
+    },
+    {
+      path: "/abaut",
+      component: Abaut,
+      meta: {
+        permission: "all",
+        title: "Biz haqimizda",
+        pageName: "abaut",
+      },
     },
   ],
 });
