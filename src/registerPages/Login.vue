@@ -80,6 +80,7 @@ const test = async () => {
     }
     response.value = res;
   } catch (error) {
+    response.value = error.message;
     console.error("Fetch Error:", error);
   }
 };
