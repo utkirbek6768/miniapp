@@ -14,9 +14,9 @@
           v-maska
           data-maska="+998 ## ### ## ##"
         />
-        <span>mana</span>
+        <span>========</span>
         <pre>{{ response }}</pre>
-        <span>mana</span>
+        <span>==========</span>
       </form>
       <button class="btn main_button" :disabled="disabled" @click="sendCode()">
         OK
