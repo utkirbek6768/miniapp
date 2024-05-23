@@ -1,8 +1,9 @@
 import axios from "axios";
 import router from "../router";
 const baseURL = import.meta.env.BASE_URL;
+
 const http = axios.create({
-  baseURL: "http://api.ildam.uz:1701/cli",
+  baseURL: "https://api.ildam.uz/cli",
   timeout: 60000,
 });
 
@@ -14,7 +15,7 @@ http.interceptors.request.use(
       (token_prefix ? token_prefix : "Bearer ") +
       (localStorage.getItem("token") ? localStorage.getItem("token") : "");
     config.headers["Content-Type"] = "application/json";
-    config.headers["brand-id"] = "2";
+    config.headers["brand-id"] = 2;
     return config;
   },
   (error) => {
@@ -33,8 +34,8 @@ http.interceptors.response.use(
   (error) => {
     let response = error.response;
 
-    if (response && response.status == 401) {
-      router.push("/");
+    if (response && response.status === 401) {
+      router.push("/login");
     }
     return Promise.reject(response);
   }

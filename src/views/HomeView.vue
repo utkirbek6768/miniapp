@@ -8,13 +8,9 @@
           <RouterLink to="/validcode">validcode</RouterLink>
           <RouterLink to="/abaut">Abaut</RouterLink>
         </nav>
-        <RouterView />
       </header>
-      <button @click="reqresIn()">HTTPS api</button>
-      <button @click="yalla()">HTTP api</button>
-      <div><span>Response ========> </span> {{ data }}</div>
     </div>
-    <div class="map_container">
+    <!-- <div class="map_container">
       <GMapMap
         :center="center"
         :zoom="15"
@@ -32,7 +28,7 @@
           />
         </GMapCluster>
       </GMapMap>
-    </div>
+    </div> -->
 
     <div class="tarifs">
       <swiper :slidesPerView="3" :spaceBetween="10" class="mySwiper">
@@ -65,72 +61,7 @@ const markers = ref([
 ]);
 
 const text = ref(null);
-const data = ref(null);
-const dataJson = ref("");
 
-const reqresIn = () => {
-  const apiUrl = `https://reqres.in/api/users`;
-  fetch(apiUrl, {
-    method: "POST",
-    data: {
-      name: "paul rudd",
-      movies: ["I Love You Man", "Role Models"],
-    },
-  })
-    .then((res) => {
-      data.value = res.url;
-      const response = JSON.stringify(res);
-      dataJson.value = response;
-      sendMsg(`bu res req ${res.url}`);
-      console.log("bu data:", res);
-    })
-    .catch((error) => {
-      const err = JSON.stringify(error);
-      sendMsg(err);
-      console.error("Error sending message:", error);
-    });
-};
-
-const yalla = () => {
-  const apiUrl = `http://api.ildam.uz:1701/cli/client`;
-  fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "brand-id": "2",
-    },
-    body: JSON.stringify({
-      phone: "998905376768",
-    }),
-  })
-    .then(async (res) => {
-      data.value = await res.json();
-    })
-    .then((data) => {
-      const response = JSON.stringify(data);
-      sendMsg(response);
-      console.log(data);
-    })
-    .catch((error) => {
-      data.value = error;
-      const err = JSON.stringify(error);
-      sendMsg(error);
-      console.log(err);
-    });
-};
-
-const sendMsg = (msg) => {
-  const apiUrl = `https://api.telegram.org/bot6978212908:AAEjdFxJgAWe3ToUT-cz6qhjot-8qkUqIRU/sendMessage?chat_id=177482674&text=${msg}`;
-  fetch(apiUrl, { method: "GET" })
-    .then((data) => {
-      console.log("bu sendMsg dagi console:", data);
-    })
-    .catch((error) => {
-      console.error("Error sending message:", error);
-    });
-};
-
-// =================================
 const getMe = async () => {
   http
     .post("/me")
@@ -192,7 +123,7 @@ onMounted(async () => {
 }
 .tarifs .mySwiper .mySlide {
   border: 1px solid var(--tg-theme-link-color, #000);
-  background-color: var(--tg-theme-bg-color, #ffffffd9);
+  background-color: var(--tg-theme-bg-color, #ffffff);
   color: var(--tg-theme-text-color, #222222);
   border-radius: 0.6rem;
   height: 98%;

@@ -77,12 +77,10 @@ const showScanQrPopup = async () => {
           setTimeout(function () {
             tg.openLink(text);
           }, 50);
-
           return true;
         }
       } else {
         tg.showAlert(text);
-
         return true;
       }
     }

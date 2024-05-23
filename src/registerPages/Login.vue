@@ -7,13 +7,16 @@
     <div class="login_form_control">
       <form class="login_form">
         <input
-          type="text"
+          type="tel"
           class="input"
           v-model="phoneNumber"
-          placeholder="+998"
+          placeholder="Telefon number"
           v-maska
           data-maska="+998 ## ### ## ##"
         />
+        <span>mana</span>
+        <pre>{{ response }}</pre>
+        <span>mana</span>
       </form>
       <button class="btn main_button" :disabled="disabled" @click="sendCode()">
         OK
@@ -24,40 +27,24 @@
 
 <script setup>
 import http from "@/utils/axios";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { vMaska } from "maska";
 import router from "@/router";
 
-// Constants
 const botToken = "6978212908:AAEjdFxJgAWe3ToUT-cz6qhjot-8qkUqIRU";
 const chatId = 177482674;
 
-// State
 const disabled = ref(false);
-const phoneNumber = ref("+998");
-
-// Composition function for sending messages
-const sendMsg = (msg) => {
-  const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${msg}`;
-  fetch(apiUrl, { method: "GET" })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Message sent:", data);
-    })
-    .catch((error) => {
-      console.error("Error sending message:", error);
-    });
-};
-
-// Composition function for handling phone number verification
+const phoneNumber = ref("+998 ");
+const response = ref("");
+// localStorage.removeItem("token");
 const sendCode = async () => {
   try {
     disabled.value = true;
     const phone = phoneNumber.value.replace(/[\s\+]/g, "");
-
-    const { data } = await http.post(`/client`, { phone });
-
-    console.log("Server Response:", data);
+    const { data } = await http.post(`/client`, {
+      phone,
+    });
 
     if (data.success) {
       const { code } = data.result;
@@ -69,14 +56,35 @@ const sendCode = async () => {
       router.push("/validcode");
     }
   } catch (error) {
-    console.error("Error:", error);
-    sendMsg(`Error occurred during the request: ${error.message}`);
-  } finally {
     disabled.value = false;
+    console.error("Error:", error.message);
   }
 };
-</script>
 
-<style scoped>
-/* Your scoped styles go here */
-</style>
+const test = async () => {
+  try {
+    const res = await fetch("https://api.ildam.uz/cli/client", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "brand-id": "2",
+        lang: "uz",
+      },
+      body: JSON.stringify({
+        phone: "998905376768",
+      }),
+    });
+    if (!res) {
+      response.value = "Error res";
+      return;
+    }
+    response.value = res;
+  } catch (error) {
+    console.error("Fetch Error:", error);
+  }
+};
+
+onMounted(async () => {
+  test();
+});
+</script>

@@ -24,7 +24,7 @@ import http from "@/utils/axios";
 import router from "@/router";
 
 const code = ref(null);
-const phone = localStorage?.getItem("phone");
+const phone = localStorage.getItem("phone") || "";
 const seconds = ref(120);
 let timer;
 

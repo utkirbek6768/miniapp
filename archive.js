@@ -68,7 +68,7 @@
 // select[data-placeholder]:-ms-input-placeholder {
 //   color: var(--tg-theme-hint-color, #ccc);
 // }
-////======================================================================
+////====================================================================
 // const sendMsg = () => {
 // 	const botToken = "6978212908:AAEjdFxJgAWe3ToUT-cz6qhjot-8qkUqIRU";
 // 	const chatId = 177482674;
@@ -83,7 +83,7 @@
 // 		console.error("Error sending message:", error);
 // 	  });
 //   };
-///////=============tg.function()========================================
+///////=============tg.function()=======================================
 const tg = window.Telegram.WebApp;
 tg.close();
 tg.init();
