@@ -8,7 +8,7 @@
     </div>
     <div class="valid_form_control">
       <form class="valid_form">
-        <input type="text" class="input" v-model="code" />
+        <input type="number" class="input" v-model="code" />
       </form>
       <div class="hint gray">
         Отправить код ещё раз через <span>{{ formatTime() }}</span>
@@ -24,7 +24,7 @@ import http from "@/utils/axios";
 import router from "@/router";
 
 const code = ref(null);
-const phone = localStorage.getItem("phone") || "";
+const phone = localStorage.getItem("yallavebphone") || "";
 const seconds = ref(120);
 let timer;
 
@@ -57,10 +57,10 @@ const validCode = async () => {
       })
       .then((res) => {
         if (res.data.result.key) {
-          localStorage.setItem("key", res.data.result.key);
+          localStorage.setItem("yallavebkey", res.data.result.key);
           router.push("/register");
         } else if (res.data.result.access_token) {
-          localStorage.setItem("token", res.data.result.access_token);
+          localStorage.setItem("yallavebtoken", res.data.result.access_token);
           router.push("/");
         }
       })

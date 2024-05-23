@@ -13,7 +13,9 @@ http.interceptors.request.use(
   (config) => {
     config.headers["Authorization"] =
       (token_prefix ? token_prefix : "Bearer ") +
-      (localStorage.getItem("token") ? localStorage.getItem("token") : "");
+      (localStorage.getItem("yallavebtoken")
+        ? localStorage.getItem("yallavebtoken")
+        : "");
     config.headers["Content-Type"] = "application/json";
     config.headers["brand-id"] = 2;
     return config;

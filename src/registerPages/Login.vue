@@ -14,9 +14,6 @@
           v-maska
           data-maska="+998 ## ### ## ##"
         />
-        <span>========</span>
-        <pre>{{ response }}</pre>
-        <span>==========</span>
       </form>
       <button class="btn main_button" :disabled="disabled" @click="sendCode()">
         OK
@@ -27,17 +24,16 @@
 
 <script setup>
 import http from "@/utils/axios";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { vMaska } from "maska";
 import router from "@/router";
 
-const botToken = "6978212908:AAEjdFxJgAWe3ToUT-cz6qhjot-8qkUqIRU";
-const chatId = 177482674;
-
 const disabled = ref(false);
 const phoneNumber = ref("+998 ");
-const response = ref("");
-// localStorage.removeItem("token");
+// localStorage.removeItem("yallavebtoken");
+// localStorage.removeItem("yallavebphone");
+// localStorage.removeItem("yallavebkey");
+// localStorage.removeItem("yallavebcode");
 const sendCode = async () => {
   try {
     disabled.value = true;
@@ -50,8 +46,8 @@ const sendCode = async () => {
       const { code } = data.result;
       console.log("Verification code:", code);
 
-      localStorage.setItem("phone", phone);
-      localStorage.setItem("code", code);
+      localStorage.setItem("yallavebphone", phone);
+      localStorage.setItem("yallavebcode", code);
 
       router.push("/validcode");
     }
@@ -60,32 +56,4 @@ const sendCode = async () => {
     console.error("Error:", error.message);
   }
 };
-
-const test = async () => {
-  try {
-    const res = await fetch("https://api.ildam.uz/cli/client", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "brand-id": "2",
-        lang: "uz",
-      },
-      body: JSON.stringify({
-        phone: "998905376768",
-      }),
-    });
-    if (!res) {
-      response.value = "Error res";
-      return;
-    }
-    response.value = res;
-  } catch (error) {
-    response.value = error.message;
-    console.error("Fetch Error:", error);
-  }
-};
-
-onMounted(async () => {
-  test();
-});
 </script>

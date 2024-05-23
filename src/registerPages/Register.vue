@@ -33,8 +33,8 @@
 <script setup>
 import http from "@/utils/axios";
 import { ref } from "vue";
-const phone = localStorage.getItem("phone");
-const key = localStorage.getItem("key");
+const phone = localStorage.getItem("yallavebphone");
+const key = localStorage.getItem("yallavebkey");
 const formData = ref({
   phone: phone,
   given_names: "",

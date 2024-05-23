@@ -74,7 +74,7 @@ const getMe = async () => {
 };
 const issetToken = async () => {
   try {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("yallavebtoken");
     if (token) {
       getMe();
     } else {
