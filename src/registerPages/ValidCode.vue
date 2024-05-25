@@ -7,37 +7,41 @@
       </div>
     </div>
     <div class="valid_form_control">
-      <form class="valid_form">
-        <input type="number" class="input" v-model="code" />
-        <span>{{ code.length }}</span>
+      <form @submit.prevent="submitHandler" class="valid_form">
+        <input
+          type="number"
+          class="input"
+          v-maska
+          data-maska="#####"
+          v-model="code"
+        />
       </form>
       <div class="hint gray">
-        Отправить код ещё раз через <span>{{ formatTime() }}</span>
+        Отправить код ещё раз через <span>{{ formatTime }}</span>
       </div>
-      <button class="btn main_button" :disabled="disabled" @click="validCode()">
-        OK
-      </button>
+      <span>{{ code.length }}</span>
+      <button class="btn main_button" @click="submitHandler">OK</button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch } from "vue";
-import http from "@/utils/axios";
-import router from "@/router";
+import { ref, computed, watch, onMounted } from "vue";
+import { useStore } from "vuex";
+import { vMaska } from "maska";
 
-const disabled = ref(true);
+const store = useStore();
+
 const code = ref("");
-const showMainButton = localStorage.getItem("yallavebcode") || "";
 const phone = localStorage.getItem("yallavebphone") || "";
 const seconds = ref(120);
 let timer;
 
-const formatTime = () => {
+const formatTime = computed(() => {
   const minutes = Math.floor(seconds.value / 60);
   const remainingSeconds = seconds.value % 60;
   return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
-};
+});
 
 const startTimer = () => {
   timer = setInterval(() => {
@@ -45,60 +49,38 @@ const startTimer = () => {
       seconds.value--;
     } else {
       clearInterval(timer);
-      sendCode();
+      store.dispatch("sendCode", phone);
+      seconds.value = 120;
     }
   }, 1000);
 };
 
-const sendCode = async () => {
+const useTimer = computed(() => store.state.auth.useTimer);
+
+const submitHandler = async () => {
   try {
-    store.dispatch("login");
-    const { data } = await http.post(`/client`, {
+    const userData = {
       phone,
-    });
-    if (data.success) {
-      const { code } = data.result;
-      localStorage.setItem("yallavebphone", phone);
-      localStorage.setItem("yallavebcode", code);
-      startTimer();
-    }
-  } catch (error) {
-    console.error("Error:", error);
-  }
-};
-
-const validCode = async () => {
-  try {
-    const res = await http.post("/valid", {
-      phone: phone,
       code: code.value,
-    });
-
-    if (res.data.result.key) {
-      localStorage.setItem("yallavebkey", res.data.result.key);
-      router.push("/register");
-    } else if (res.data.result.access_token) {
-      localStorage.setItem("yallavebtoken", res.data.result.access_token);
-      router.push("/");
-    }
+    };
+    await store.dispatch("validConfirmCode", userData);
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 };
 
-watch(code, (newValue) => {
-  disabled.value = newValue.length < 5;
-});
-
-onMounted(() => {
-  if (showMainButton) {
+watch(useTimer, (newValue) => {
+  if (newValue) {
+    clearInterval(timer);
     startTimer();
   }
 });
 
-onBeforeUnmount(() => {
-  clearInterval(timer);
+onMounted(() => {
+  startTimer();
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Add your styles here */
+</style>

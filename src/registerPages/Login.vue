@@ -36,8 +36,7 @@ import { useStore } from "vuex";
 
 const store = useStore();
 
-const disabled = ref(true);
-const phoneNumber = ref("+998 ");
+const phoneNumber = ref("+998 90 537 67 68");
 
 const submitHandler = async () => {
   try {
