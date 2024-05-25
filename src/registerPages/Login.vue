@@ -43,21 +43,7 @@ const submitHandler = async () => {
   try {
     const phone = phoneNumber.value.replace(/[\s\+]/g, "");
     store.dispatch("sendCode", phone);
-    // const { data } = await http.post(`/client`, {
-    //   phone,
-    // });
-
-    // if (data.success) {
-    //   const { code } = data.result;
-    //   console.log("Verification code:", code);
-
-    //   localStorage.setItem("yallavebphone", phone);
-    //   localStorage.setItem("yallavebcode", code);
-
-    //   router.push("/validcode");
-    // }
   } catch (error) {
-    disabled.value = false;
     console.error("Error:", error);
   }
 };
@@ -65,7 +51,6 @@ const isLoading = computed(() => store.state.auth.isLoading);
 watch(phoneNumber, (newValue) => {
   const phone = newValue.replace(/[\s\+]/g, "");
   if (phone.length >= 12) {
-    disabled.value = false;
   }
 });
 </script>
