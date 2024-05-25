@@ -86,6 +86,10 @@ const issetToken = async () => {
   }
 };
 onMounted(async () => {
+  //   localStorage.removeItem("yallavebtoken");
+  //   localStorage.removeItem("yallavebphone");
+  //   localStorage.removeItem("yallavebkey");
+  //   localStorage.removeItem("yallavebcode");
   issetToken();
 });
 </script>

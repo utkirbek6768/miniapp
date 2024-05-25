@@ -5,7 +5,7 @@
       <div class="hint gray">Мы отправим вам код подтверждения</div>
     </div>
     <div class="login_form_control">
-      <form class="login_form">
+      <form @submit.prevent class="login_form">
         <input
           type="tel"
           class="input"
@@ -15,7 +15,12 @@
           data-maska="+998 ## ### ## ##"
         />
       </form>
-      <button class="btn main_button" :disabled="disabled" @click="sendCode()">
+      <pre>{{ store.state }}</pre>
+      <button
+        class="btn main_button"
+        :disabled="isLoading"
+        @click="submitHandler()"
+      >
         OK
       </button>
     </div>
@@ -23,37 +28,44 @@
 </template>
 
 <script setup>
-import http from "@/utils/axios";
-import { ref } from "vue";
+// import http from "@/utils/axios";
+// import router from "@/router";
+import { ref, watch, computed } from "vue";
 import { vMaska } from "maska";
-import router from "@/router";
+import { useStore } from "vuex";
 
-const disabled = ref(false);
+const store = useStore();
+
+const disabled = ref(true);
 const phoneNumber = ref("+998 ");
-// localStorage.removeItem("yallavebtoken");
-// localStorage.removeItem("yallavebphone");
-// localStorage.removeItem("yallavebkey");
-// localStorage.removeItem("yallavebcode");
-const sendCode = async () => {
+
+const submitHandler = async () => {
   try {
-    disabled.value = true;
     const phone = phoneNumber.value.replace(/[\s\+]/g, "");
-    const { data } = await http.post(`/client`, {
-      phone,
-    });
+    store.dispatch("sendCode", phone);
+    // const { data } = await http.post(`/client`, {
+    //   phone,
+    // });
 
-    if (data.success) {
-      const { code } = data.result;
-      console.log("Verification code:", code);
+    // if (data.success) {
+    //   const { code } = data.result;
+    //   console.log("Verification code:", code);
 
-      localStorage.setItem("yallavebphone", phone);
-      localStorage.setItem("yallavebcode", code);
+    //   localStorage.setItem("yallavebphone", phone);
+    //   localStorage.setItem("yallavebcode", code);
 
-      router.push("/validcode");
-    }
+    //   router.push("/validcode");
+    // }
   } catch (error) {
     disabled.value = false;
-    console.error("Error:", error.message);
+    console.error("Error:", error);
   }
 };
+const isLoading = computed(() => store.state.auth.isLoading);
+watch(phoneNumber, (newValue) => {
+  const phone = newValue.replace(/[\s\+]/g, "");
+  if (phone.length >= 12) {
+    disabled.value = false;
+  }
+});
 </script>

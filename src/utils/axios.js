@@ -38,6 +38,10 @@ http.interceptors.response.use(
 
     if (response && response.status === 401) {
       router.push("/login");
+      localStorage.removeItem("yallavebtoken");
+      localStorage.removeItem("yallavebphone");
+      localStorage.removeItem("yallavebkey");
+      localStorage.removeItem("yallavebcode");
     }
     return Promise.reject(response);
   }
