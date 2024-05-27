@@ -21,7 +21,11 @@
         Отправить код ещё раз через <span>{{ formatTime }}</span>
       </div>
       <span>{{ useTimer }}</span>
-      <button class="btn main_button" @click="submitHandlerInValidCode">
+      <button
+        class="btn main_button"
+        v-if="show"
+        @click="submitHandlerInValidCode"
+      >
         OK
       </button>
     </div>

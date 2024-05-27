@@ -20,7 +20,9 @@
       </div>
     </div>
   </div>
-  <button class="btn main_button" @click="submitHandlerInLogin()">OK</button>
+  <button class="btn main_button" v-if="show" @click="submitHandlerInLogin()">
+    OK
+  </button>
 </template>
 
 <script setup>
