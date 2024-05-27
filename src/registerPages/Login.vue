@@ -54,7 +54,7 @@ watch(phoneNumber, (newValue) => {
 });
 
 const showButton = () => {
-  if (phoneNumber.length >= 17) {
+  if (phoneNumber.value.length >= 17) {
     tg.MainButton.show();
   } else {
     tg.MainButton.hide();
