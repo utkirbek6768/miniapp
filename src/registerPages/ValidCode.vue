@@ -60,7 +60,7 @@ const useTimer = computed(() => store.state.auth.useTimer);
 
 const submitHandlerInValidCode = async () => {
   try {
-    tg.MainButton.hide();
+    // tg.MainButton.hide();
     const userData = {
       phone,
       code: code.value,
