@@ -20,7 +20,7 @@
       <div class="hint gray">
         Отправить код ещё раз через <span>{{ formatTime }}</span>
       </div>
-      <button class="btn main_button" @click="submitHandler">OK</button>
+      <!-- <button class="btn main_button" @click="submitHandler">OK</button> -->
     </div>
   </div>
 </template>
@@ -60,12 +60,12 @@ const useTimer = computed(() => store.state.auth.useTimer);
 
 const submitHandler = async () => {
   try {
+    tg.MainButton.hide();
     const userData = {
       phone,
       code: code.value,
     };
     await store.dispatch("validConfirmCode", userData);
-    // tg.MainButton.hide();
   } catch (err) {
     console.error("Error validating code:", err);
   }
