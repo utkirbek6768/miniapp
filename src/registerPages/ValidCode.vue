@@ -65,7 +65,7 @@ const submitHandler = async () => {
       code: code.value,
     };
     await store.dispatch("validConfirmCode", userData);
-    tg.MainButton.hide();
+    // tg.MainButton.hide();
   } catch (err) {
     console.error("Error validating code:", err);
   }
