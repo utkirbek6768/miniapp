@@ -33,8 +33,8 @@
 
 <script setup>
 import { ref, computed, watch, onMounted } from "vue";
-import { useStore } from "vuex";
 import { vMaska } from "maska";
+import { useStore } from "vuex";
 
 const store = useStore();
 
