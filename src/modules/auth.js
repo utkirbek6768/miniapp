@@ -5,6 +5,7 @@ import AuthServise from "@/utils/authservise";
 
 const state = {
   isLoading: false,
+  useTimer: false,
 };
 
 const mutations = {
@@ -14,13 +15,16 @@ const mutations = {
   },
   sedCodeSuccess(state) {
     state.isLoading = false;
+    state.useTimer = true;
   },
   sedCodeFailure(state) {
     state.isLoading = false;
+    state.useTimer = false;
   },
   //=================sedCodeStart=======================
   validcodeStart(state) {
     state.isLoading = true;
+    state.useTimer = false;
   },
   validcodeSuccess(state) {
     state.isLoading = false;

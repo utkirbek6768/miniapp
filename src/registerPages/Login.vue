@@ -15,6 +15,9 @@
           data-maska="+998 ## ### ## ##"
         />
       </form>
+      <div>
+        <p>Current Date and Time: {{ currentDateTime }}</p>
+      </div>
       <!-- <button class="btn main_button" @click="submitHandler()">OK</button> -->
     </div>
   </div>
@@ -28,9 +31,12 @@ const tg = window.Telegram.WebApp;
 import { vMaska } from "maska";
 import { useStore } from "vuex";
 
+import dayjs from "dayjs";
+const currentDateTime = dayjs().format("HH:mm:ss");
+
 const store = useStore();
 
-const phoneNumber = ref("+998 90 537 67 6");
+const phoneNumber = ref("+998 90 537 67 68");
 
 const submitHandlerInLogin = async () => {
   try {
