@@ -36,22 +36,13 @@ const tg = window.Telegram.WebApp;
 const store = useStore();
 const code = ref("");
 const phone = localStorage.getItem("yallavebphone") || "";
-const savedTime = localStorage.getItem("timerEndTime");
-
-const seconds = ref(120);
+const useTimer = computed(() => store.state.auth.useTimer);
+const seconds = ref(
+  localStorage.getItem("timerSeconds")
+    ? parseInt(localStorage.getItem("timerSeconds"), 10)
+    : 120
+);
 let timer = null;
-
-const calculateRemainingTime = () => {
-  if (savedTime) {
-    const now = dayjs();
-    const timerEndTime = dayjs(savedTime);
-    const difference = timerEndTime.diff(now, "second");
-    return difference > 0 ? difference : 120;
-  }
-  return 120;
-};
-
-seconds.value = calculateRemainingTime();
 
 const formatTime = computed(() => {
   const minutes = Math.floor(seconds.value / 60);
@@ -60,19 +51,24 @@ const formatTime = computed(() => {
 });
 
 const startTimer = () => {
-  const timerEndTime = dayjs().add(seconds.value, "second");
-  localStorage.setItem("timerEndTime", timerEndTime.toISOString());
+  if (useTimer.value) {
+    timer = setInterval(() => {
+      if (seconds.value > 0) {
+        seconds.value--;
+        localStorage.setItem("timerSeconds", seconds.value);
+      } else {
+        store.dispatch("sendCode", phone);
+        seconds.value = 120;
+        localStorage.setItem("timerSeconds", seconds.value);
+      }
+    }, 1000);
+  }
+};
 
-  timer = setInterval(() => {
-    if (seconds.value > 0) {
-      seconds.value--;
-    } else {
-      clearInterval(timer);
-      store.dispatch("sendCode", phone);
-      seconds.value = 120;
-      startTimer(); // Restart the timer
-    }
-  }, 1000);
+const stopTimer = () => {
+  if (timer) {
+    clearInterval(timer);
+  }
 };
 
 const submitHandlerInValidCode = async () => {
@@ -83,6 +79,7 @@ const submitHandlerInValidCode = async () => {
       code: code.value,
     };
     await store.dispatch("validConfirmCode", userData);
+    localStorage.removeItem("timerSeconds"); // Reset the timer after successful code validation
   } catch (err) {
     console.error("Error validating code:", err);
   }
@@ -96,16 +93,24 @@ const showButton = () => {
   }
 };
 
+watch(useTimer, (newVal) => {
+  if (!newVal) {
+    stopTimer();
+    localStorage.removeItem("timerSeconds");
+    seconds.value = 120;
+  }
+});
+
 onMounted(() => {
-  startTimer();
+  if (useTimer.value) {
+    startTimer();
+  }
   tg.MainButton.setParams({ text: "OK" });
   tg.onEvent("mainButtonClicked", submitHandlerInValidCode);
 });
 
 onBeforeUnmount(() => {
-  if (timer) {
-    clearInterval(timer);
-  }
+  stopTimer();
 });
 
 watch(code, showButton);
