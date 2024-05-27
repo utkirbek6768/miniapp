@@ -82,7 +82,7 @@ watchEffect(() => {
   });
   tg.expand();
   tg.ready();
-  tg.onEvent("mainButtonClicked", submitHandler);
+  //   tg.onEvent("mainButtonClicked", submitHandler);
 });
 </script>
 <style scoped></style>
