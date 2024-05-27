@@ -35,7 +35,7 @@
           v-model="formData.birthday"
         />
       </form>
-      <button class="btn main_button" @click="submitHandler">OK</button>
+      <!-- <button class="btn main_button" @click="submitHandler">OK</button> -->
     </div>
   </div>
 </template>
@@ -59,6 +59,7 @@ const formData = ref({
 
 const submitHandler = async () => {
   try {
+    tg.MainButton.hide();
     await store.dispatch("registerUser", formData);
   } catch (err) {
     console.error("Error validating code:", err);

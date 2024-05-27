@@ -15,7 +15,7 @@
           data-maska="+998 ## ### ## ##"
         />
       </form>
-      <button class="btn main_button" @click="submitHandler()">OK</button>
+      <!-- <button class="btn main_button" @click="submitHandler()">OK</button> -->
     </div>
   </div>
 </template>
@@ -34,9 +34,9 @@ const phoneNumber = ref("+998 90 537 67 6");
 
 const submitHandler = async () => {
   try {
+    tg.MainButton.hide();
     const phone = phoneNumber.value.replace(/[\s\+]/g, "");
     store.dispatch("sendCode", phone);
-    // tg.MainButton.hide();
   } catch (error) {
     console.error("Error:", error);
   }
