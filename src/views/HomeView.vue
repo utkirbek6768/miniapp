@@ -10,6 +10,7 @@
         </nav>
       </header>
     </div>
+    <pre>{{ text ? text : " text no" }}</pre>
     <!-- <div class="map_container">
       <GMapMap
         :center="center"
@@ -43,7 +44,7 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { RouterView } from "vue-router";
+// import { RouterView } from "vue-router";
 import http from "@/utils/axios";
 import router from "@/router";
 import { Swiper, SwiperSlide } from "swiper/vue";
@@ -78,7 +79,7 @@ const issetToken = async () => {
     if (token) {
       getMe();
     } else {
-      router.push("/");
+      router.push("/login");
     }
     console.log(token ? token : "token topilmadi");
   } catch (error) {

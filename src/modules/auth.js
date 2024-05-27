@@ -11,7 +11,6 @@ const state = {
 const mutations = {
   sedCodeStart(state) {
     state.isLoading = true;
-    localStorage.removeItem("yallavebtoken");
   },
   sedCodeSuccess(state) {
     state.isLoading = false;

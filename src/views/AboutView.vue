@@ -20,6 +20,7 @@
       <div class="hint gray">
         Отправить код ещё раз через <span>{{ formatTime }}</span>
       </div>
+      <span>{{ useTimer }}</span>
       <button class="btn main_button" @click="submitHandlerInValidCode">
         OK
       </button>
@@ -62,6 +63,7 @@ const startTimer = () => {
         localStorage.setItem("timerSeconds", seconds.value);
       }
     }, 1000);
+  } else {
   }
 };
 
@@ -98,10 +100,12 @@ watch(useTimer, (newVal) => {
     stopTimer();
     localStorage.removeItem("timerSeconds");
     seconds.value = 120;
+  } else {
+    startTimer();
   }
 });
 
-onMounted(() => {
+onMounted(async () => {
   if (useTimer.value) {
     startTimer();
   }
