@@ -59,7 +59,6 @@ const formData = ref({
 
 const submitHandler = async () => {
   try {
-    tg.MainButton.hide();
     await store.dispatch("registerUser", formData);
   } catch (err) {
     console.error("Error validating code:", err);

@@ -58,7 +58,6 @@ const startTimer = () => {
 
 const submitHandlerInValidCode = async () => {
   try {
-    tg.MainButton.hide();
     const userData = {
       phone,
       code: code.value,
