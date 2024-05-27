@@ -17,8 +17,8 @@ const tg = window.Telegram.WebApp;
 // };
 
 watchEffect(() => {
+  tg.expand();
   tg.ready();
-  //   getMi();
 });
 </script>
 
