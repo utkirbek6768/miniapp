@@ -18,11 +18,9 @@
       <div>
         <p>Current Date and Time: {{ currentDateTime }}</p>
       </div>
-      <button class="btn main_button" @click="submitHandlerInLogin()">
-        OK
-      </button>
     </div>
   </div>
+  <button class="btn main_button" @click="submitHandlerInLogin()">OK</button>
 </template>
 
 <script setup>
@@ -37,7 +35,7 @@ const currentDateTime = dayjs().format("HH:mm:ss");
 const store = useStore();
 
 const phoneNumber = ref("+998 90 537 67 68");
-
+const show = ref(false);
 const submitHandlerInLogin = async () => {
   try {
     tg.MainButton.hide();
@@ -53,16 +51,16 @@ const isLoading = computed(() => store.state.auth.isLoading);
 
 const showButton = () => {
   if (phoneNumber.value.length >= 17) {
-    tg.MainButton.show();
+    show.value = true;
   } else {
-    tg.MainButton.hide();
+    show.value = false;
   }
 };
 watchEffect(() => {
   showButton();
-  tg.MainButton.setParams({
-    text: "OK",
-  });
-  tg.onEvent("mainButtonClicked", submitHandlerInLogin);
+  //   tg.MainButton.setParams({
+  //     text: "OK",
+  //   });
+  //   tg.onEvent("mainButtonClicked", submitHandlerInLogin);
 });
 </script>

@@ -38,6 +38,7 @@ const store = useStore();
 const code = ref("");
 const phone = localStorage.getItem("yallavebphone") || "";
 const useTimer = computed(() => store.state.auth.useTimer);
+const show = ref(false);
 const seconds = ref(
   localStorage.getItem("timerSeconds")
     ? parseInt(localStorage.getItem("timerSeconds"), 10)
@@ -89,9 +90,9 @@ const submitHandlerInValidCode = async () => {
 
 const showButton = () => {
   if (code.value.length >= 5) {
-    tg.MainButton.show();
+    show.value = true;
   } else {
-    tg.MainButton.hide();
+    show.value = false;
   }
 };
 
@@ -109,8 +110,8 @@ onMounted(async () => {
   if (useTimer.value) {
     startTimer();
   }
-  tg.MainButton.setParams({ text: "OK" });
-  tg.onEvent("mainButtonClicked", submitHandlerInValidCode);
+  //   tg.MainButton.setParams({ text: "OK" });
+  //   tg.onEvent("mainButtonClicked", submitHandlerInValidCode);
 });
 
 onBeforeUnmount(() => {

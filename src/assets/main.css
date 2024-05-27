@@ -2,6 +2,7 @@
 
 
 .wrapper {
+	border: 1px solid red;
 	height: 100%;
 	padding: 1rem;
   }
@@ -54,8 +55,10 @@
   .main_button {
 	position: absolute;
 	bottom: 0rem;
-	left: 1.3rem;
-	width: calc(100% - 2.6rem);
+	left: 0rem;
+	margin: 0px;
+	/* width: calc(100% - 2.6rem); */
+	width: 100%;
   }
   .btn {
 	font-size: 14px;
