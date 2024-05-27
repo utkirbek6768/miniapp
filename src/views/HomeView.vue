@@ -10,7 +10,7 @@
         </nav>
       </header>
     </div>
-    <pre>{{ text ? text : " text no" }}</pre>
+    <!-- <pre>{{ text ? text : " text no" }}</pre> -->
     <!-- <div class="map_container">
       <GMapMap
         :center="center"
