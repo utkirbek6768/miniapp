@@ -43,6 +43,9 @@
 <script setup>
 import http from "@/utils/axios";
 import { ref, watch, watchEffect } from "vue";
+import { useStore } from "vuex";
+
+const store = useStore();
 const tg = window.Telegram.WebApp;
 const phone = localStorage.getItem("yallavebphone");
 const key = localStorage.getItem("yallavebkey");
@@ -82,7 +85,7 @@ watchEffect(() => {
   });
   tg.expand();
   tg.ready();
-  //   tg.onEvent("mainButtonClicked", submitHandler);
+  tg.onEvent("mainButtonClicked", submitHandler);
 });
 </script>
 <style scoped></style>
