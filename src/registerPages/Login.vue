@@ -46,7 +46,7 @@ const submitHandlerInLogin = async () => {
   }
 };
 
-// const isLoading = computed(() => store.state.auth.isLoading);
+const isLoading = computed(() => store.state.auth.isLoading);
 
 const showButton = () => {
   if (phoneNumber.value.length >= 17) {

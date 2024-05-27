@@ -81,11 +81,11 @@ const showButton = () => {
 watch(useTimer, (newValue) => {
   if (newValue) {
     clearInterval(timer);
-    startTimer();
   }
 });
 
 watchEffect(() => {
+  startTimer();
   showButton();
   tg.MainButton.setParams({
     text: "OK",
