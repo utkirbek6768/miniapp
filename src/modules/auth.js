@@ -89,12 +89,12 @@ const actions = {
         .then(async (res) => {
           console.log(res.data.result);
           context.commit("registerSuccess");
+          router.push("/");
           //   if (res.data.result.key) {
           //     localStorage.setItem("yallavebkey", res.data.result.key);
           //     router.push("/register");
           //   } else if (res.data.result.access_token) {
           //     localStorage.setItem("yallavebtoken", res.data.result.access_token);
-          //     router.push("/");
           //   }
         })
         .catch((err) => {
