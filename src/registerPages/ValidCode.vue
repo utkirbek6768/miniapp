@@ -71,13 +71,14 @@ const submitHandler = async () => {
       code: code.value,
     };
     await store.dispatch("validConfirmCode", userData);
+    tg.MainButton.hide();
   } catch (err) {
     console.error("Error validating code:", err);
   }
 };
 
 const showButton = () => {
-  if (code.value.length < 5) {
+  if (code.value.length >= 5) {
     tg.MainButton.show();
   } else {
     tg.MainButton.hide();

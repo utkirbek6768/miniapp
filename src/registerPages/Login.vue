@@ -42,6 +42,7 @@ const submitHandler = async () => {
   try {
     const phone = phoneNumber.value.replace(/[\s\+]/g, "");
     store.dispatch("sendCode", phone);
+    tg.MainButton.hide();
   } catch (error) {
     console.error("Error:", error);
   }
