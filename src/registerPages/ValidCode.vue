@@ -26,12 +26,14 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, watchEffect } from "vue";
+import { ref, computed, watchEffect } from "vue";
 const tg = window.Telegram.WebApp;
 import { vMaska } from "maska";
+import dayjs from "dayjs";
 import { useStore } from "vuex";
 
 const store = useStore();
+const currentDateTime = dayjs().format("HH:mm:ss");
 
 const useTimer = computed(() => store.state.auth.useTimer);
 const code = ref("");
@@ -50,7 +52,6 @@ const startTimer = () => {
     if (seconds.value > 0) {
       seconds.value--;
     } else {
-      clearInterval(timer);
       store.dispatch("sendCode", phone);
       seconds.value = 120;
     }
@@ -77,12 +78,6 @@ const showButton = () => {
     tg.MainButton.hide();
   }
 };
-
-watch(useTimer, (newValue) => {
-  if (newValue) {
-    clearInterval(timer);
-  }
-});
 
 watchEffect(() => {
   startTimer();
