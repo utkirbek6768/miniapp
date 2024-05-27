@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, watchEffect, onMounted } from "vue";
+import { ref, computed, watchEffect, onMounted } from "vue";
 const tg = window.Telegram.WebApp;
 import { vMaska } from "maska";
 import { useStore } from "vuex";
@@ -58,6 +58,7 @@ const startTimer = () => {
 
 const submitHandlerInValidCode = async () => {
   try {
+    tg.MainButton.hide();
     const userData = {
       phone,
       code: code.value,
