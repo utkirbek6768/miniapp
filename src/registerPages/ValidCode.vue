@@ -56,8 +56,6 @@ const startTimer = () => {
   }, 1000);
 };
 
-const useTimer = computed(() => store.state.auth.useTimer);
-
 const submitHandlerInValidCode = async () => {
   try {
     const userData = {
@@ -78,12 +76,12 @@ const showButton = () => {
   }
 };
 
-watch(useTimer, (newValue) => {
-  if (newValue) {
-    clearInterval(timer);
-    startTimer();
-  }
-});
+// watch(useTimer, (newValue) => {
+//   if (newValue) {
+//     clearInterval(timer);
+//     startTimer();
+//   }
+// });
 
 onMounted(() => {
   startTimer();
