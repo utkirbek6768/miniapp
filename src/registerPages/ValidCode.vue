@@ -20,7 +20,7 @@
       <div class="hint gray">
         Отправить код ещё раз через <span>{{ formatTime }}</span>
       </div>
-      <span>{{ useTimer }}</span>
+      <!-- <span>{{ useTimer }}</span> -->
       <button
         class="btn main_button"
         v-if="show"

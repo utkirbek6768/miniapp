@@ -15,9 +15,9 @@
           data-maska="+998 ## ### ## ##"
         />
       </form>
-      <div>
+      <!-- <div>
         <p>Current Date and Time: {{ currentDateTime }}</p>
-      </div>
+      </div> -->
     </div>
   </div>
   <button class="btn main_button" v-if="show" @click="submitHandlerInLogin()">
