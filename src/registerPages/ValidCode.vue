@@ -20,19 +20,20 @@
       <div class="hint gray">
         Отправить код ещё раз через <span>{{ formatTime }}</span>
       </div>
-      <button
+      <!-- <button
         class="btn main_button"
         @click="submitHandler"
         :disabled="code.length < 5"
       >
         OK
-      </button>
+      </button> -->
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, computed, watch, watchEffect, onMounted } from "vue";
+const tg = window.Telegram.WebApp;
 import { vMaska } from "maska";
 import { useStore } from "vuex";
 
@@ -75,6 +76,14 @@ const submitHandler = async () => {
   }
 };
 
+const showButton = () => {
+  if (code.length < 5) {
+    tg.MainButton.show();
+  } else {
+    tg.MainButton.hide();
+  }
+};
+
 watch(useTimer, (newValue) => {
   if (newValue) {
     clearInterval(timer);
@@ -84,5 +93,12 @@ watch(useTimer, (newValue) => {
 
 onMounted(() => {
   startTimer();
+});
+watchEffect(() => {
+  showButton();
+  tg.MainButton.setParams({
+    text: "OK",
+  });
+  tg.onEvent("mainButtonClicked", submitHandler);
 });
 </script>
