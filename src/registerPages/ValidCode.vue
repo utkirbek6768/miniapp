@@ -20,10 +20,10 @@
       <div class="hint gray">
         Отправить код ещё раз через <span>{{ formatTime }}</span>
       </div>
-      <span>{{ useTimer }}</span>
-      <button class="btn main_button" @click="submitHandlerInValidCode">
+      <!-- <span>{{ useTimer }}</span> -->
+      <!-- <button class="btn main_button" @click="submitHandlerInValidCode">
         OK
-      </button>
+      </button> -->
     </div>
   </div>
 </template>
