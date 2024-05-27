@@ -20,26 +20,24 @@
       <div class="hint gray">
         Отправить код ещё раз через <span>{{ formatTime }}</span>
       </div>
-      <!-- <button class="btn main_button" @click="submitHandler">OK</button> -->
+      <button class="btn main_button" @click="submitHandlerInValidCode">
+        OK
+      </button>
     </div>
   </div>
 </template>
-
 <script setup>
-import { ref, computed, watchEffect } from "vue";
-const tg = window.Telegram.WebApp;
+import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
+import { useStore } from "vuex";
 import { vMaska } from "maska";
 import dayjs from "dayjs";
-import { useStore } from "vuex";
 
+const tg = window.Telegram.WebApp;
 const store = useStore();
-const currentDateTime = dayjs().format("HH:mm:ss");
-
-const useTimer = computed(() => store.state.auth.useTimer);
 const code = ref("");
 const phone = localStorage.getItem("yallavebphone") || "";
-const seconds = ref(120);
-let timer;
+const seconds = ref(10);
+let timer = null;
 
 const formatTime = computed(() => {
   const minutes = Math.floor(seconds.value / 60);
@@ -53,7 +51,7 @@ const startTimer = () => {
       seconds.value--;
     } else {
       store.dispatch("sendCode", phone);
-      seconds.value = 120;
+      seconds.value = 10;
     }
   }, 1000);
 };
@@ -79,12 +77,17 @@ const showButton = () => {
   }
 };
 
-watchEffect(() => {
+onMounted(() => {
   startTimer();
-  showButton();
-  tg.MainButton.setParams({
-    text: "OK",
-  });
+  tg.MainButton.setParams({ text: "OK" });
   tg.onEvent("mainButtonClicked", submitHandlerInValidCode);
 });
+
+onBeforeUnmount(() => {
+  if (timer) {
+    clearInterval(timer);
+  }
+});
+
+watch(code, showButton);
 </script>

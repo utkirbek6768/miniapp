@@ -20,7 +20,9 @@
       <div class="hint gray">
         Отправить код ещё раз через <span>{{ formatTime }}</span>
       </div>
-      <!-- <button class="btn main_button" @click="submitHandler">OK</button> -->
+      <button class="btn main_button" @click="submitHandlerInValidCode">
+        OK
+      </button>
     </div>
   </div>
 </template>
@@ -34,8 +36,22 @@ const tg = window.Telegram.WebApp;
 const store = useStore();
 const code = ref("");
 const phone = localStorage.getItem("yallavebphone") || "";
+const savedTime = localStorage.getItem("timerEndTime");
+
 const seconds = ref(120);
 let timer = null;
+
+const calculateRemainingTime = () => {
+  if (savedTime) {
+    const now = dayjs();
+    const timerEndTime = dayjs(savedTime);
+    const difference = timerEndTime.diff(now, "second");
+    return difference > 0 ? difference : 120;
+  }
+  return 120;
+};
+
+seconds.value = calculateRemainingTime();
 
 const formatTime = computed(() => {
   const minutes = Math.floor(seconds.value / 60);
@@ -44,12 +60,17 @@ const formatTime = computed(() => {
 });
 
 const startTimer = () => {
+  const timerEndTime = dayjs().add(seconds.value, "second");
+  localStorage.setItem("timerEndTime", timerEndTime.toISOString());
+
   timer = setInterval(() => {
     if (seconds.value > 0) {
       seconds.value--;
     } else {
+      clearInterval(timer);
       store.dispatch("sendCode", phone);
       seconds.value = 120;
+      startTimer(); // Restart the timer
     }
   }, 1000);
 };
