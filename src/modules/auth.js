@@ -66,7 +66,7 @@ const actions = {
       context.commit("validcodeStart");
       AuthServise.validCode(userData)
         .then(async (res) => {
-          console.log(res.data.result);
+          //   console.log(res.data.result);
           context.commit("validcodeSuccess");
           if (res.data.result.key) {
             localStorage.setItem("yallavebkey", res.data.result.key);
@@ -87,15 +87,11 @@ const actions = {
       context.commit("registerStart");
       AuthServise.register(userData)
         .then(async (res) => {
-          console.log(res.data.result);
           context.commit("registerSuccess");
-          router.push("/");
-          //   if (res.data.result.key) {
-          //     localStorage.setItem("yallavebkey", res.data.result.key);
-          //     router.push("/register");
-          //   } else if (res.data.result.access_token) {
-          //     localStorage.setItem("yallavebtoken", res.data.result.access_token);
-          //   }
+          if (res.data.result.access_token) {
+            localStorage.setItem("yallavebtoken", res.data.result.access_token);
+            router.push("/");
+          }
         })
         .catch((err) => {
           context.commit("registerFailure");
