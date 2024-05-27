@@ -40,7 +40,7 @@ const submitHandlerInLogin = async () => {
   try {
     const phone = phoneNumber.value.replace(/[\s\+]/g, "");
     store.dispatch("sendCode", phone);
-    router.push("/validcode");
+    router.push("/abaut");
   } catch (error) {
     console.error("Error:", error);
   }

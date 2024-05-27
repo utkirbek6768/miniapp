@@ -1,127 +1,91 @@
 <template>
-  <main>
-    <button class="btn" @click="setBackgroundColor('gray')">
-      setBackgroundColor
-    </button>
-    <button class="btn btn-primary">btn-primary</button>
-    <button class="close_btn">close_btn</button>
-    <button class="btn" @click="tg.requestContact()">requestContact</button>
-    <button class="btn" @click="tg.showAlert('Salom!')">showAlert</button>
-    <button class="btn" @click="tg.showConfirm('Ishonchingiz komilmi?')">
-      showConfirm
-    </button>
-    <button class="btn" @click="tg.requestWriteAccess()">
-      requestWriteAccess
-    </button>
-    <button class="btn" @click="tg.showPopup()">showPopup</button>
-    <button class="btn" @click="showScanQrPopup()">showScanQrPopup</button>
-    <button class="btn" @click="tg.showScanQrPopup(true)">
-      showScanQrPopup(true)
-    </button>
-
-    <form :model="form" class="form">
-      <input v-model="form.name" type="text" class="input" placeholder="Name" />
-      <input v-model="form.age" type="text" class="input" placeholder="Age" />
-      <select v-model="form.region" name="region" id="region" class="select">
-        <option value="fergana">Farg'ona</option>
-        <option value="andijon">Andijon</option>
-        <option value="namangan">Namangan</option>
-      </select>
-    </form>
-  </main>
+  <div class="valid_wrapper">
+    <div class="valid_text_control">
+      <div class="title">Введите код безопасности</div>
+      <div class="hint gray">
+        Введите 5-значный код, который мы отправили на номер {{ phone }}
+      </div>
+    </div>
+    <div class="valid_form_control">
+      <form @submit.prevent="submitHandler" class="valid_form">
+        <input
+          type="text"
+          class="input"
+          v-maska
+          data-maska="#####"
+          v-model="code"
+          maxlength="5"
+        />
+      </form>
+      <div class="hint gray">
+        Отправить код ещё раз через <span>{{ formatTime }}</span>
+      </div>
+      <!-- <button class="btn main_button" @click="submitHandler">OK</button> -->
+    </div>
+  </div>
 </template>
-
 <script setup>
-// https://habr.com/ru/articles/666278/          // <====bu tg class veribl lar
-
-import { ref, watchEffect } from "vue";
+import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
+import { useStore } from "vuex";
+import { vMaska } from "maska";
+import dayjs from "dayjs";
 
 const tg = window.Telegram.WebApp;
+const store = useStore();
+const code = ref("");
+const phone = localStorage.getItem("yallavebphone") || "";
+const seconds = ref(120);
+let timer = null;
 
-const form = ref({
-  name: "",
-  age: "",
-  region: "",
+const formatTime = computed(() => {
+  const minutes = Math.floor(seconds.value / 60);
+  const remainingSeconds = seconds.value % 60;
+  return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
 });
-// const showScanQrPopup = async () => {
-// tg.showScanQrPopup(params)
-// .then((qrText) => {
-//   console.log('QR-kod matni:', qrText);
 
-//   if (callback) {
-//     const shouldClosePopup = callback(qrText);
-
-//     if (shouldClosePopup) {
-//       console.log('Pop-upni yopish');
-//       tg.closePopup();
-//     }
-//   }
-// })
-// .catch((error) => {
-//   console.error('QR-kod skanlashda xato yuz berdi:', error);
-// });
-// };
-
-const showScanQrPopup = async () => {
-  tg.showScanQrPopup(
-    {
-      text: linksOnly ? "ya.ru" : "google.com",
-    },
-    function (text) {
-      if (linksOnly) {
-        const lowerText = text.toString().toLowerCase();
-        if (
-          lowerText.substring(0, 7) === "http://" ||
-          lowerText.substring(0, 8) === "https://"
-        ) {
-          setTimeout(function () {
-            tg.openLink(text);
-          }, 50);
-          return true;
-        }
-      } else {
-        tg.showAlert(text);
-        return true;
-      }
-    }
-  );
-};
-
-const onSendData = () => {
-  try {
-    tg.sendData(JSON.stringify(form.value));
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-watchEffect(() => {
-  try {
-    tg.expand();
-    tg.MainButton.setParams({
-      text: "Tayyor",
-    });
-
-    tg.onEvent("mainButtonClicked", onSendData);
-
-    if (
-      form.value.name == "" ||
-      form.value.age == "" ||
-      form.value.region == ""
-    ) {
-      tg.MainButton.hide();
+const startTimer = () => {
+  timer = setInterval(() => {
+    if (seconds.value > 0) {
+      seconds.value--;
     } else {
-      tg.MainButton.show();
+      store.dispatch("sendCode", phone);
+      seconds.value = 120;
     }
-  } catch (error) {
-    console.log(error);
+  }, 1000);
+};
+
+const submitHandlerInValidCode = async () => {
+  try {
+    tg.MainButton.hide();
+    const userData = {
+      phone,
+      code: code.value,
+    };
+    await store.dispatch("validConfirmCode", userData);
+  } catch (err) {
+    console.error("Error validating code:", err);
+  }
+};
+
+const showButton = () => {
+  if (code.value.length >= 5) {
+    tg.MainButton.show();
+  } else {
+    tg.MainButton.hide();
+  }
+};
+
+onMounted(() => {
+  startTimer();
+  tg.MainButton.setParams({ text: "OK" });
+  tg.onEvent("mainButtonClicked", submitHandlerInValidCode);
+});
+
+onBeforeUnmount(() => {
+  if (timer) {
+    clearInterval(timer);
   }
 });
-</script>
 
-<style scoped>
-.input {
-  display: block;
-  margin-top: 10px;
-}
-</style>
+watch(code, showButton);
+</script>
