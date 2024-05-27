@@ -15,13 +15,13 @@
           data-maska="+998 ## ### ## ##"
         />
       </form>
-      <button
+      <!-- <button
         class="btn main_button"
         :disabled="isLoading"
         @click="submitHandler()"
       >
         OK
-      </button>
+      </button> -->
     </div>
   </div>
 </template>
@@ -30,6 +30,7 @@
 // import http from "@/utils/axios";
 // import router from "@/router";
 import { ref, watch, computed } from "vue";
+const tg = window.Telegram.WebApp;
 import { vMaska } from "maska";
 import { useStore } from "vuex";
 
@@ -50,5 +51,20 @@ watch(phoneNumber, (newValue) => {
   const phone = newValue.replace(/[\s\+]/g, "");
   if (phone.length >= 12) {
   }
+});
+
+const showButton = () => {
+  if (phoneNumber.length >= 17) {
+    tg.MainButton.show();
+  } else {
+    tg.MainButton.hide();
+  }
+};
+watchEffect(() => {
+  showButton();
+  tg.MainButton.setParams({
+    text: "OK",
+  });
+  tg.onEvent("mainButtonClicked", submitHandler);
 });
 </script>

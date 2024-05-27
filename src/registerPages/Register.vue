@@ -35,14 +35,14 @@
           v-model="formData.birthday"
         />
       </form>
-      <button class="btn main_button" @click="submitHandler()">OK</button>
+      <!-- <button class="btn main_button" @click="submitHandler()">OK</button> -->
     </div>
   </div>
 </template>
 
 <script setup>
-import http from "@/utils/axios";
-import { ref, watch, watchEffect } from "vue";
+// import http from "@/utils/axios";
+import { ref, watchEffect } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore();
@@ -65,6 +65,7 @@ const submitHandler = async () => {
     console.error("Error validating code:", err);
   }
 };
+
 const showButton = () => {
   const { given_names, sur_name, birthday } = formData.value;
   if (given_names && sur_name && birthday) {
@@ -73,18 +74,11 @@ const showButton = () => {
     tg.MainButton.hide();
   }
 };
-watch(formData, (newValue) => {
-  const { given_names, sur_name, birthday } = newValue;
-  if (given_names && sur_name && birthday) {
-  }
-});
 watchEffect(() => {
   showButton();
   tg.MainButton.setParams({
-    text: "Tayyor",
+    text: "OK",
   });
-  tg.expand();
-  tg.ready();
   tg.onEvent("mainButtonClicked", submitHandler);
 });
 </script>
