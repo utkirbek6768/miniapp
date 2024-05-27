@@ -1,4 +1,5 @@
 import http from "@/utils/axios";
+const tg = window.Telegram.WebApp;
 import router from "@/router";
 import AuthServise from "@/utils/authservise";
 
@@ -23,6 +24,7 @@ const mutations = {
   //=================sedCodeStart=======================
   validcodeStart(state) {
     state.isLoading = true;
+    tg.MainButton.hide();
   },
   validcodeSuccess(state) {
     state.isLoading = false;
