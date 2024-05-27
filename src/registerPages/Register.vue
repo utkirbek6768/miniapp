@@ -35,13 +35,11 @@
           v-model="formData.birthday"
         />
       </form>
-      <!-- <button class="btn main_button" @click="submitHandler()">OK</button> -->
     </div>
   </div>
 </template>
 
 <script setup>
-// import http from "@/utils/axios";
 import { ref, watchEffect } from "vue";
 import { useStore } from "vuex";
 

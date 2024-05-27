@@ -10,6 +10,7 @@ const state = {
 const mutations = {
   sedCodeStart(state) {
     state.isLoading = true;
+    localStorage.removeItem("yallavebtoken");
   },
   sedCodeSuccess(state) {
     state.isLoading = false;
@@ -18,7 +19,6 @@ const mutations = {
   sedCodeFailure(state) {
     state.isLoading = false;
     state.useTimer = false;
-    // localStorage.removeItem("yallavebtoken");
   },
   //=================sedCodeStart=======================
   validcodeStart(state) {
