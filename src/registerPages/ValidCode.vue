@@ -77,7 +77,7 @@ const submitHandler = async () => {
 };
 
 const showButton = () => {
-  if (code.length < 5) {
+  if (code.value.length < 5) {
     tg.MainButton.show();
   } else {
     tg.MainButton.hide();
