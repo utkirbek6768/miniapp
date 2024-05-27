@@ -58,9 +58,9 @@ const startTimer = () => {
 
 const useTimer = computed(() => store.state.auth.useTimer);
 
-const submitHandler = async () => {
+const submitHandlerInValidCode = async () => {
   try {
-    // tg.MainButton.hide();
+    tg.MainButton.hide();
     const userData = {
       phone,
       code: code.value,
@@ -94,6 +94,6 @@ watchEffect(() => {
   tg.MainButton.setParams({
     text: "OK",
   });
-  tg.onEvent("mainButtonClicked", submitHandler);
+  tg.onEvent("mainButtonClicked", submitHandlerInValidCode);
 });
 </script>

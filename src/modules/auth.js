@@ -24,7 +24,6 @@ const mutations = {
   //=================sedCodeStart=======================
   validcodeStart(state) {
     state.isLoading = true;
-    tg.MainButton.hide();
   },
   validcodeSuccess(state) {
     state.isLoading = false;
