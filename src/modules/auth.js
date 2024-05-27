@@ -28,9 +28,11 @@ const mutations = {
   },
   validcodeSuccess(state) {
     state.isLoading = false;
+    state.useTimer = false;
   },
   validcodeFailure(state) {
     state.isLoading = false;
+    state.useTimer = false;
   },
   //   =================registerStart=================
   registerStart(state) {
@@ -53,7 +55,7 @@ const actions = {
           if (res.data.success) {
             context.commit("sedCodeSuccess");
             localStorage.setItem("yallavebphone", phone);
-            router.push("/validcode");
+            // router.push("/validcode");
             console.log(res.data.result.code);
           }
         })

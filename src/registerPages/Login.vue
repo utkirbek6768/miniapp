@@ -25,7 +25,7 @@
 
 <script setup>
 // import http from "@/utils/axios";
-// import router from "@/router";
+import router from "@/router";
 import { ref, watchEffect, computed } from "vue";
 const tg = window.Telegram.WebApp;
 import { vMaska } from "maska";
@@ -40,6 +40,7 @@ const submitHandlerInLogin = async () => {
   try {
     const phone = phoneNumber.value.replace(/[\s\+]/g, "");
     store.dispatch("sendCode", phone);
+    router.push("/validcode");
   } catch (error) {
     console.error("Error:", error);
   }
