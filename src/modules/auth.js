@@ -54,7 +54,6 @@ const actions = {
           if (res.data.success) {
             context.commit("sedCodeSuccess");
             localStorage.setItem("yallavebphone", phone);
-            router.push("/validcode");
             console.log(res.data.result.code);
           }
         })
