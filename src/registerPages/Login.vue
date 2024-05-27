@@ -15,7 +15,6 @@
           data-maska="+998 ## ### ## ##"
         />
       </form>
-      <pre>{{ store.state }}</pre>
       <button
         class="btn main_button"
         :disabled="isLoading"

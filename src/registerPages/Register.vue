@@ -18,6 +18,16 @@
           placeholder="Фамилия"
           v-model="formData.sur_name"
         />
+        <select
+          v-model="formData.gender"
+          name="gender"
+          id="gender"
+          class="select"
+          placeholder="Выберите свой пол"
+        >
+          <option value="MALE">Мужской</option>
+          <option value="FEMALE">Женщина</option>
+        </select>
         <input
           type="date"
           class="input"
@@ -25,33 +35,54 @@
           v-model="formData.birthday"
         />
       </form>
-      <button class="btn main_button" @click="register()">OK</button>
+      <button class="btn main_button" @click="submitHandler()">OK</button>
     </div>
   </div>
 </template>
 
 <script setup>
 import http from "@/utils/axios";
-import { ref } from "vue";
+import { ref, watch, watchEffect } from "vue";
+const tg = window.Telegram.WebApp;
 const phone = localStorage.getItem("yallavebphone");
 const key = localStorage.getItem("yallavebkey");
 const formData = ref({
   phone: phone,
   given_names: "",
   sur_name: "",
+  gender: "MALE",
   birthday: "",
   key: key,
 });
 
-const register = async () => {
-  http
-    .post("/register", formData.value)
-    .then((res) => {
-      console.log(res.data.result);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+const submitHandler = async () => {
+  try {
+    await store.dispatch("registerUser", formData);
+  } catch (err) {
+    console.error("Error validating code:", err);
+  }
 };
+const showButton = () => {
+  const { given_names, sur_name, birthday } = formData.value;
+  if (given_names && sur_name && birthday) {
+    tg.MainButton.show();
+  } else {
+    tg.MainButton.hide();
+  }
+};
+watch(formData, (newValue) => {
+  const { given_names, sur_name, birthday } = newValue;
+  if (given_names && sur_name && birthday) {
+  }
+});
+watchEffect(() => {
+  showButton();
+  tg.MainButton.setParams({
+    text: "Tayyor",
+  });
+  tg.expand();
+  tg.ready();
+  tg.onEvent("mainButtonClicked", submitHandler);
+});
 </script>
 <style scoped></style>

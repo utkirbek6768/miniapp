@@ -9,18 +9,24 @@
     <div class="valid_form_control">
       <form @submit.prevent="submitHandler" class="valid_form">
         <input
-          type="number"
+          type="text"
           class="input"
           v-maska
           data-maska="#####"
           v-model="code"
+          maxlength="5"
         />
       </form>
       <div class="hint gray">
         Отправить код ещё раз через <span>{{ formatTime }}</span>
       </div>
-      <span>{{ code.length }}</span>
-      <button class="btn main_button" @click="submitHandler">OK</button>
+      <button
+        class="btn main_button"
+        @click="submitHandler"
+        :disabled="code.length < 5"
+      >
+        OK
+      </button>
     </div>
   </div>
 </template>
@@ -65,7 +71,7 @@ const submitHandler = async () => {
     };
     await store.dispatch("validConfirmCode", userData);
   } catch (err) {
-    console.error(err);
+    console.error("Error validating code:", err);
   }
 };
 
@@ -80,7 +86,3 @@ onMounted(() => {
   startTimer();
 });
 </script>
-
-<style scoped>
-/* Add your styles here */
-</style>

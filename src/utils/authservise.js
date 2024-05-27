@@ -7,6 +7,9 @@ const authServise = {
   validCode(userData) {
     return http.post("/valid", { userData });
   },
+  register(userData) {
+    return http.post("/register", { userData });
+  },
 };
 
 export default authServise;

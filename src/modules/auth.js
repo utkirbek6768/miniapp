@@ -20,16 +20,25 @@ const mutations = {
     state.useTimer = false;
     // localStorage.removeItem("yallavebtoken");
   },
+  //=================sedCodeStart=======================
   validcodeStart(state) {
     state.isLoading = true;
-    // localStorage.removeItem("yallavebtoken");
   },
   validcodeSuccess(state) {
     state.isLoading = false;
   },
   validcodeFailure(state) {
     state.isLoading = false;
-    // localStorage.removeItem("yallavebtoken");
+  },
+  //   =================registerStart=================
+  registerStart(state) {
+    state.isLoading = true;
+  },
+  registerSuccess(state) {
+    state.isLoading = false;
+  },
+  registerFailure(state) {
+    state.isLoading = false;
   },
 };
 
@@ -40,11 +49,11 @@ const actions = {
       AuthServise.sendSms(phone)
         .then(async (res) => {
           if (res.data.success) {
+            context.commit("sedCodeSuccess");
             localStorage.setItem("yallavebphone", phone);
             router.push("/validcode");
             console.log(res.data.result.code);
           }
-          context.commit("sedCodeSuccess");
         })
         .catch((err) => {
           context.commit("sedCodeFailure");
@@ -69,6 +78,27 @@ const actions = {
         })
         .catch((err) => {
           context.commit("validcodeFailure");
+          console.log("err.response.data", err.response.data);
+        });
+    });
+  },
+  registerUser(context, userData) {
+    return new Promise(() => {
+      context.commit("registerStart");
+      AuthServise.register(userData)
+        .then(async (res) => {
+          console.log(res.data.result);
+          context.commit("registerSuccess");
+          //   if (res.data.result.key) {
+          //     localStorage.setItem("yallavebkey", res.data.result.key);
+          //     router.push("/register");
+          //   } else if (res.data.result.access_token) {
+          //     localStorage.setItem("yallavebtoken", res.data.result.access_token);
+          //     router.push("/");
+          //   }
+        })
+        .catch((err) => {
+          context.commit("registerFailure");
           console.log("err.response.data", err.response.data);
         });
     });
