@@ -18,9 +18,9 @@
       <div>
         <p>Current Date and Time: {{ currentDateTime }}</p>
       </div>
-      <!-- <button class="btn main_button" @click="submitHandlerInLogin()">
+      <button class="btn main_button" @click="submitHandlerInLogin()">
         OK
-      </button> -->
+      </button>
     </div>
   </div>
 </template>
