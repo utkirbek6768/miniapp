@@ -29,14 +29,14 @@
 <script setup>
 // import http from "@/utils/axios";
 // import router from "@/router";
-import { ref, watch, computed } from "vue";
+import { ref, watch, watchEffect, computed } from "vue";
 const tg = window.Telegram.WebApp;
 import { vMaska } from "maska";
 import { useStore } from "vuex";
 
 const store = useStore();
 
-const phoneNumber = ref("+998 90 537 67 68");
+const phoneNumber = ref("+998 90 537 67 6");
 
 const submitHandler = async () => {
   try {
