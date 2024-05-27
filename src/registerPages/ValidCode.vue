@@ -20,13 +20,7 @@
       <div class="hint gray">
         Отправить код ещё раз через <span>{{ formatTime }}</span>
       </div>
-      <!-- <button
-        class="btn main_button"
-        @click="submitHandler"
-        :disabled="code.length < 5"
-      >
-        OK
-      </button> -->
+      <button class="btn main_button" @click="submitHandler">OK</button>
     </div>
   </div>
 </template>

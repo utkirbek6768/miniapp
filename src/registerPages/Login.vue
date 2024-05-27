@@ -15,13 +15,7 @@
           data-maska="+998 ## ### ## ##"
         />
       </form>
-      <!-- <button
-        class="btn main_button"
-        :disabled="isLoading"
-        @click="submitHandler()"
-      >
-        OK
-      </button> -->
+      <button class="btn main_button" @click="submitHandler()">OK</button>
     </div>
   </div>
 </template>

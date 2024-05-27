@@ -35,6 +35,7 @@
           v-model="formData.birthday"
         />
       </form>
+      <button class="btn main_button" @click="submitHandler">OK</button>
     </div>
   </div>
 </template>

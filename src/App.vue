@@ -2,7 +2,6 @@
 // import http from "@/utils/axios";
 import { RouterView } from "vue-router";
 import { watchEffect } from "vue";
-
 const tg = window.Telegram.WebApp;
 
 // const getMi = () => {
