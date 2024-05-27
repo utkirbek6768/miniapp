@@ -26,13 +26,14 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, watchEffect, onMounted } from "vue";
+import { ref, computed, watch, watchEffect } from "vue";
 const tg = window.Telegram.WebApp;
 import { vMaska } from "maska";
 import { useStore } from "vuex";
 
 const store = useStore();
 
+const useTimer = computed(() => store.state.auth.useTimer);
 const code = ref("");
 const phone = localStorage.getItem("yallavebphone") || "";
 const seconds = ref(120);
@@ -55,8 +56,6 @@ const startTimer = () => {
     }
   }, 1000);
 };
-
-const useTimer = computed(() => store.state.auth.useTimer);
 
 const submitHandlerInValidCode = async () => {
   try {
@@ -86,9 +85,6 @@ watch(useTimer, (newValue) => {
   }
 });
 
-onMounted(() => {
-  startTimer();
-});
 watchEffect(() => {
   showButton();
   tg.MainButton.setParams({

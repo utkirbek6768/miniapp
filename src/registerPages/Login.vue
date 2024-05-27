@@ -26,14 +26,12 @@
 <script setup>
 // import http from "@/utils/axios";
 // import router from "@/router";
-import { ref, watch, watchEffect, computed } from "vue";
+import { ref, watchEffect, computed } from "vue";
 const tg = window.Telegram.WebApp;
 import { vMaska } from "maska";
 import { useStore } from "vuex";
-
 import dayjs from "dayjs";
 const currentDateTime = dayjs().format("HH:mm:ss");
-
 const store = useStore();
 
 const phoneNumber = ref("+998 90 537 67 68");
@@ -46,12 +44,8 @@ const submitHandlerInLogin = async () => {
     console.error("Error:", error);
   }
 };
-const isLoading = computed(() => store.state.auth.isLoading);
-watch(phoneNumber, (newValue) => {
-  const phone = newValue.replace(/[\s\+]/g, "");
-  if (phone.length >= 12) {
-  }
-});
+
+// const isLoading = computed(() => store.state.auth.isLoading);
 
 const showButton = () => {
   if (phoneNumber.value.length >= 17) {
