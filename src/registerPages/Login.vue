@@ -32,7 +32,7 @@ const store = useStore();
 
 const phoneNumber = ref("+998 90 537 67 6");
 
-const submitHandler = async () => {
+const submitHandlerInLogin = async () => {
   try {
     tg.MainButton.hide();
     const phone = phoneNumber.value.replace(/[\s\+]/g, "");
@@ -60,6 +60,6 @@ watchEffect(() => {
   tg.MainButton.setParams({
     text: "OK",
   });
-  tg.onEvent("mainButtonClicked", submitHandler);
+  tg.onEvent("mainButtonClicked", submitHandlerInLogin);
 });
 </script>
