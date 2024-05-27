@@ -81,7 +81,7 @@ const submitHandlerInValidCode = async () => {
       code: code.value,
     };
     await store.dispatch("validConfirmCode", userData);
-    localStorage.removeItem("timerSeconds"); // Reset the timer after successful code validation
+    localStorage.removeItem("timerSeconds");
   } catch (err) {
     console.error("Error validating code:", err);
   }
