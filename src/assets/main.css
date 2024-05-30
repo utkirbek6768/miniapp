@@ -356,16 +356,47 @@ select,
   }
   .tarifsInSwiper .mySwiper {
 	height: 100%;
+	
   }
   .tarifsInSwiper .mySwiper .mySlide {
-	border: 1px solid var(--tg-theme-link-color, #000);
-	background-color: var(--tg-theme-bg-color, #ffffff);
-	color: var(--tg-theme-text-color, #222222);
-	border-radius: 0.6rem;
+	/* border: 1px solid var(--tg-theme-link-color, #000); */
+	background-color: var(--tg-theme-bg-color, #F6F6F6);
+	color: var(--tg-theme-text-color, #000);
+	border-radius: 0.9rem;
 	height: 98%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	padding: .8rem;
+}
+.tarifsInSwiper .mySwiper .active{
+	background-color: var(--tg-theme-bg-color, #912DF8);
+	color: var(--tg-theme-text-color, white);
+  }
+  .slider_header{
+	margin-bottom: .6rem;
+  }
+  .tarifsInSwiper .mySwiper .active
+  .slider_header_hint{
+	font-size: 12px;
+	line-height: 15.6px;
+	color: #9A9A9A;
+  }
+  .tarifsInSwiper .mySwiper .active .slider_header_title{
+	font: Inter;
+	font-size: 16px;
+	line-height: 20px;
+	color: #FFFFFF;
+  }
+
+  .slider_header_title{
+	font: Inter;
+	font-size: 16px;
+	line-height: 20px;
+	color: #26123A;
+  }
+
+  .slider_header_hint{
+	font-size: 12px;
+	line-height: 15.6px;
+	color: #26123A;
   }
 
   

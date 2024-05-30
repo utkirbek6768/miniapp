@@ -39,14 +39,15 @@ const currPos = computed(() => ({
   lng: coords.value.longitude,
 }));
 const otherPos = ref(null);
-const currentAddress = ref(""); // Address of the currentAddress
-const otherAddress = ref(""); // Address of the clickedPosition
+const currentAddress = ref(""); // Address of the current position
+const otherAddress = ref(""); // Address of the clicked position
 
 const loader = new Loader({ apiKey: GOOGLE_MAPS_API_KEY });
 const mapDiv = ref(null);
 let map = ref(null);
 let clickListener = null;
 let updateTimer = null;
+let currentMarker = null; // Marker for the current position
 
 const getAddress = async (lat, lng) => {
   try {
@@ -62,12 +63,16 @@ const getAddress = async (lat, lng) => {
   }
 };
 
-// Watch for changes in currPos to update address
+// Watch for changes in currPos to update address and marker position
 watch(currPos, async (newPos) => {
   currentAddress.value = await getAddress(
     newPos.lat.toFixed(2),
     newPos.lng.toFixed(2)
   );
+  if (currentMarker) {
+    currentMarker.setPosition(newPos);
+    map.value.setCenter(newPos);
+  }
 });
 
 const debounceClick = (func, delay) => {
@@ -94,6 +99,14 @@ onMounted(async () => {
     zoom: 15,
     disableDefaultUI: true, // Disables all default controls
   });
+
+  // Add marker for the current position
+  currentMarker = new google.maps.Marker({
+    position: currPos.value,
+    map: map.value,
+    title: "Current Position",
+  });
+
   clickListener = map.value.addListener("click", debouncedHandleMapClick);
 
   // Fetch address when component mounts
@@ -153,7 +166,7 @@ const distance = computed(() =>
       <div class="where">
         <div class="disc"></div>
         <div class="where_address">
-          {{ currentAddress }}
+          <div class="address">{{ currentAddress }}</div>
         </div>
       </div>
       <div class="whereto">
@@ -165,10 +178,39 @@ const distance = computed(() =>
     </div>
     <div class="tarifsInSwiper">
       <swiper :slidesPerView="3" :spaceBetween="10" class="mySwiper">
-        <swiper-slide class="mySlide">Slide 1</swiper-slide>
-        <swiper-slide class="mySlide">Slide 2</swiper-slide>
-        <swiper-slide class="mySlide">Slide 3</swiper-slide>
-        <swiper-slide class="mySlide">Slide 4</swiper-slide>
+        <swiper-slide class="mySlide active">
+          <div class="slider_header">
+            <div class="slider_header_title">Эконом</div>
+            <div class="slider_header_hint">от 5000 сум</div>
+          </div>
+          <div class="mySlide_image">
+            <img src="../assets/ekanom.png" alt="" />
+          </div>
+        </swiper-slide>
+        <swiper-slide class="mySlide"
+          ><div class="slider_header">
+            <div class="slider_header_title">Стандарт</div>
+            <div class="slider_header_hint">от 6000 сум</div>
+          </div>
+          <div class="mySlide_image">
+            <img src="../assets/standart.png" alt="" /></div
+        ></swiper-slide>
+        <swiper-slide class="mySlide"
+          ><div class="slider_header">
+            <div class="slider_header_title">Комфорт</div>
+            <div class="slider_header_hint">от 7000 сум</div>
+          </div>
+          <div class="mySlide_image">
+            <img src="../assets/extracomfort.png" alt="" /></div
+        ></swiper-slide>
+        <swiper-slide class="mySlide"
+          ><div class="slider_header">
+            <div class="slider_header_title">Эконом</div>
+            <div class="slider_header_hint">от 5000 сум</div>
+          </div>
+          <div class="mySlide_image">
+            <img src="../assets/comfort.png" alt="" /></div
+        ></swiper-slide>
       </swiper>
     </div>
     <div ref="mapDiv" style="width: 100%; height: 100vh" />
@@ -181,7 +223,7 @@ const distance = computed(() =>
   top: 0px;
   left: 0px;
   width: calc(100% - 1rem);
-  z-index: 3;
+  z-index: 1;
   padding: 0.7rem;
   background-color: transparent;
   border-radius: 15px;
@@ -200,7 +242,6 @@ const distance = computed(() =>
 }
 
 .disc {
-  /* #912DF8 */
   border: 5px solid #00d17e;
   border-radius: 100%;
   width: 20px;
