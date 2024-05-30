@@ -3,7 +3,8 @@
     <div class="valid_text_control">
       <div class="title">Введите код безопасности</div>
       <div class="hint gray">
-        Введите 5-значный код, который мы отправили на номер {{ phone }}
+        Введите 5-значный код, который мы отправили на номер
+        {{ phoneView }}
       </div>
     </div>
     <div class="valid_form_control">
@@ -20,36 +21,36 @@
       <div class="hint gray">
         Отправить код ещё раз через <span>{{ formatTime }}</span>
       </div>
-      <!-- <span>{{ useTimer }}</span> -->
-      <button
-        class="btn main_button"
-        v-if="show"
-        @click="submitHandlerInValidCode"
-      >
-        OK
-      </button>
     </div>
   </div>
+  <button
+    class="btn main_button"
+    :disabled="isLoading"
+    v-if="show"
+    @click="submitHandlerInValidCode"
+  >
+    OK
+  </button>
 </template>
+
 <script setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 import { useStore } from "vuex";
 import { vMaska } from "maska";
-import dayjs from "dayjs";
-
 const tg = window.Telegram.WebApp;
 const store = useStore();
 const code = ref("");
-const phone = localStorage.getItem("yallavebphone") || "";
-const useTimer = computed(() => store.state.auth.useTimer);
 const show = ref(false);
+
+const isLoading = computed(() => store.state.auth.isLoading);
+const useTimer = computed(() => store.state.auth.useTimer);
 const seconds = ref(
   localStorage.getItem("timerSeconds")
     ? parseInt(localStorage.getItem("timerSeconds"), 10)
     : 120
 );
 let timer = null;
-
+const phoneView = localStorage.getItem("yallavebphone");
 const formatTime = computed(() => {
   const minutes = Math.floor(seconds.value / 60);
   const remainingSeconds = seconds.value % 60;
@@ -57,24 +58,25 @@ const formatTime = computed(() => {
 });
 
 const startTimer = () => {
-  if (useTimer.value) {
+  if (!timer) {
     timer = setInterval(() => {
       if (seconds.value > 0) {
         seconds.value--;
-        localStorage.setItem("timerSeconds", seconds.value);
       } else {
-        store.dispatch("sendCode", phone);
+        if (useTimer.value) {
+          store.dispatch("sendCode", phone);
+        }
         seconds.value = 120;
-        localStorage.setItem("timerSeconds", seconds.value);
       }
+      localStorage.setItem("timerSeconds", seconds.value);
     }, 1000);
-  } else {
   }
 };
 
 const stopTimer = () => {
   if (timer) {
     clearInterval(timer);
+    timer = null;
   }
 };
 
@@ -82,7 +84,7 @@ const submitHandlerInValidCode = async () => {
   try {
     tg.MainButton.hide();
     const userData = {
-      phone,
+      phone: localStorage.getItem("yallavebphone"),
       code: code.value,
     };
     await store.dispatch("validConfirmCode", userData);
@@ -101,19 +103,14 @@ const showButton = () => {
 };
 
 watch(useTimer, (newVal) => {
-  if (!newVal) {
-    stopTimer();
-    localStorage.removeItem("timerSeconds");
+  if (newVal) {
     seconds.value = 120;
-  } else {
-    startTimer();
+    localStorage.setItem("timerSeconds", seconds.value);
   }
 });
 
-onMounted(async () => {
-  if (useTimer.value) {
-    startTimer();
-  }
+onMounted(() => {
+  startTimer();
   //   tg.MainButton.setParams({ text: "OK" });
   //   tg.onEvent("mainButtonClicked", submitHandlerInValidCode);
 });
@@ -124,3 +121,15 @@ onBeforeUnmount(() => {
 
 watch(code, showButton);
 </script>
+
+<script>
+export default {
+  directives: {
+    maska: vMaska,
+  },
+};
+</script>
+
+<style scoped>
+/* Add your styles here */
+</style>

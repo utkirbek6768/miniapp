@@ -1,7 +1,7 @@
 import http from "@/utils/axios";
-const tg = window.Telegram.WebApp;
 import router from "@/router";
-import AuthServise from "@/utils/authservise";
+// import AuthServise from "@/utils/authservise";
+// const tg = window.Telegram.WebApp;
 
 const state = {
   isLoading: false,
@@ -15,10 +15,12 @@ const mutations = {
   sedCodeSuccess(state) {
     state.isLoading = false;
     state.useTimer = true;
+    localStorage.setItem("startTimer", "start");
   },
   sedCodeFailure(state) {
     state.isLoading = false;
     state.useTimer = false;
+    localStorage.setItem("startTimer", "stop");
   },
   //=================sedCodeStart=======================
   validcodeStart(state) {
@@ -28,6 +30,7 @@ const mutations = {
   validcodeSuccess(state) {
     state.isLoading = false;
     state.useTimer = false;
+    localStorage.setItem("startTimer", "stop");
   },
   validcodeFailure(state) {
     state.isLoading = false;
@@ -43,13 +46,25 @@ const mutations = {
   registerFailure(state) {
     state.isLoading = false;
   },
+
+  //   =================logoutStart=================
+  logoutStart(state) {
+    state.isLoading = true;
+  },
+  logoutSuccess(state) {
+    state.isLoading = false;
+  },
+  logoutFailure(state) {
+    state.isLoading = false;
+  },
 };
 
 const actions = {
   sendCode(context, phone) {
     return new Promise(() => {
       context.commit("sedCodeStart");
-      AuthServise.sendSms(phone)
+      http
+        .post("/client", { phone: phone })
         .then(async (res) => {
           if (res.data.success) {
             context.commit("sedCodeSuccess");
@@ -66,7 +81,11 @@ const actions = {
   validConfirmCode(context, userData) {
     return new Promise(() => {
       context.commit("validcodeStart");
-      AuthServise.validCode(userData)
+      http
+        .post("/valid", {
+          phone: userData.phone,
+          code: userData.code,
+        })
         .then(async (res) => {
           //   console.log(res.data.result);
           context.commit("validcodeSuccess");
@@ -76,6 +95,10 @@ const actions = {
           } else if (res.data.result.access_token) {
             localStorage.setItem("yallavebtoken", res.data.result.access_token);
             router.push("/");
+          } else {
+            console.log(
+              "So'rov bajarildi lekin shartga tushmadi modules ni ichidagi auth.js ga qara validConfirmCode da"
+            );
           }
         })
         .catch((err) => {
@@ -87,7 +110,16 @@ const actions = {
   registerUser(context, userData) {
     return new Promise(() => {
       context.commit("registerStart");
-      AuthServise.register(userData)
+      http
+        .post("/register", {
+          phone: userData.phone,
+          given_names: userData.given_names,
+          sur_name: userData.sur_name,
+          father_name: userData.father_name,
+          gender: userData.gender,
+          birthday: userData.birthday,
+          key: userData.key,
+        })
         .then(async (res) => {
           context.commit("registerSuccess");
           if (res.data.result.access_token) {
@@ -97,6 +129,25 @@ const actions = {
         })
         .catch((err) => {
           context.commit("registerFailure");
+          console.log("err.response.data", err.response.data);
+        });
+    });
+  },
+  logoutUser(context) {
+    return new Promise(() => {
+      context.commit("logoutStart");
+      http
+        .post("/logout")
+        .then(async (res) => {
+          context.commit("logoutSuccess");
+          router.push("/login");
+          localStorage.removeItem("yallavebtoken");
+          localStorage.removeItem("yallavebphone");
+          localStorage.removeItem("yallavebkey");
+          localStorage.removeItem("yallavebcode");
+        })
+        .catch((err) => {
+          context.commit("logoutFailure");
           console.log("err.response.data", err.response.data);
         });
     });

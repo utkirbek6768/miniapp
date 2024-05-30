@@ -1,23 +1,19 @@
 import axios from "axios";
 import router from "../router";
-const baseURL = import.meta.env.BASE_URL;
-
+const baseURL = import.meta.env.VITE_BASE_URL;
 const http = axios.create({
-  baseURL: "https://api.ildam.uz/cli",
+  baseURL: baseURL,
   timeout: 60000,
 });
 
-const token_prefix = localStorage.getItem("token_prefix");
-
 http.interceptors.request.use(
   (config) => {
-    config.headers["Authorization"] =
-      (token_prefix ? token_prefix : "Bearer ") +
-      (localStorage.getItem("yallavebtoken")
-        ? localStorage.getItem("yallavebtoken")
-        : "");
+    config.headers["Authorization"] = localStorage.getItem("yallavebtoken")
+      ? "Bearer " + localStorage.getItem("yallavebtoken")
+      : "";
     config.headers["Content-Type"] = "application/json";
     config.headers["brand-id"] = 2;
+    config.headers["lang"] = "uz";
     return config;
   },
   (error) => {
@@ -43,6 +39,7 @@ http.interceptors.response.use(
       localStorage.removeItem("yallavebkey");
       localStorage.removeItem("yallavebcode");
     }
+
     return Promise.reject(response);
   }
 );

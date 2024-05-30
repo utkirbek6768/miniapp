@@ -1,9 +1,11 @@
 @import './base.css';
 
-
+#app {
+	height: 100%;
+}
 .wrapper {
 	height: 100%;
-	padding: 1rem;
+	padding: 0rem;
   }
   body {
 	height: var(--tg-viewport-stable-height);
@@ -326,4 +328,46 @@ select,
 	transform: translateX(
 	  calc(var(--switch-container-width) - var(--switch-size))
 	);
+  }
+
+  /* ===========gooogle map======================== */
+
+  .home_wrapper {
+	height: 100%;
+  }
+  .map_container {
+	height: 100%;
+  }
+  .header_wrapper {
+	width: calc(100% - 0rem);
+	position: absolute;
+	left: 0;
+	top: 0;
+	padding: 1rem;
+	z-index: 3;
+	background: transparent;
+  }
+  .vue-map-container {
+	height: inherit;
+  }
+  
+  .tarifs {
+	height: 100px;
+	position: absolute;
+	bottom: 1.3rem;
+	left: 1.3rem;
+	width: calc(100% - 2.6rem);
+  }
+  .tarifs .mySwiper {
+	height: 100%;
+  }
+  .tarifs .mySwiper .mySlide {
+	border: 1px solid var(--tg-theme-link-color, #000);
+	background-color: var(--tg-theme-bg-color, #ffffff);
+	color: var(--tg-theme-text-color, #222222);
+	border-radius: 0.6rem;
+	height: 98%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
   }

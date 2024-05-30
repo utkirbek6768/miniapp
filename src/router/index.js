@@ -3,7 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import Login from "../registerPages/Login.vue";
 import Register from "../registerPages/Register.vue";
 import Abaut from "../views/AboutView.vue";
-import SendSms from "../registerPages/SendSms.vue";
+import Map from "../registerPages/Map.vue";
 import ValidCode from "../registerPages/ValidCode.vue";
 
 const router = createRouter({
@@ -27,9 +27,9 @@ const router = createRouter({
       component: Register,
     },
     {
-      path: "/sendsms",
-      name: "sendsms",
-      component: SendSms,
+      path: "/map",
+      name: "map",
+      component: Map,
     },
     {
       path: "/validcode",

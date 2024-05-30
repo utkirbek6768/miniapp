@@ -1,121 +1,100 @@
+<script>
+import { computed, ref, onMounted, onUnmounted, watch } from "vue";
+import { useGeolocation } from "../useGeolocation";
+import { Loader } from "@googlemaps/js-api-loader";
+
+const GOOGLE_MAPS_API_KEY = "AIzaSyAWvaPB0kX0dkUskWVZca-A3U5g8kAV1_s";
+
+export default {
+  name: "App",
+  setup() {
+    const { coords } = useGeolocation();
+    const currPos = computed(() => ({
+      lat: coords.value.latitude,
+      lng: coords.value.longitude,
+    }));
+    const otherPos = ref(null);
+
+    const loader = new Loader({ apiKey: GOOGLE_MAPS_API_KEY });
+    const mapDiv = ref(null);
+    let map = ref(null);
+    let clickListener = null;
+    onMounted(async () => {
+      await loader.load();
+      map.value = new google.maps.Map(mapDiv.value, {
+        center: currPos.value,
+        zoom: 7,
+      });
+      clickListener = map.value.addListener(
+        "click",
+        ({ latLng: { lat, lng } }) =>
+          (otherPos.value = { lat: lat(), lng: lng() })
+      );
+    });
+    onUnmounted(async () => {
+      if (clickListener) clickListener.remove();
+    });
+
+    let line = null;
+    watch([map, currPos, otherPos], () => {
+      if (line) line.setMap(null);
+      if (map.value && otherPos.value != null)
+        line = new google.maps.Polyline({
+          path: [currPos.value, otherPos.value],
+          map: map.value,
+        });
+    });
+
+    const haversineDistance = (pos1, pos2) => {
+      const R = 3958.8; // Radius of the Earth in miles
+      const rlat1 = pos1.lat * (Math.PI / 180); // Convert degrees to radians
+      const rlat2 = pos2.lat * (Math.PI / 180); // Convert degrees to radians
+      const difflat = rlat2 - rlat1; // Radian difference (latitudes)
+      const difflon = (pos2.lng - pos1.lng) * (Math.PI / 180); // Radian difference (longitudes)
+
+      const d =
+        2 *
+        R *
+        Math.asin(
+          Math.sqrt(
+            Math.sin(difflat / 2) * Math.sin(difflat / 2) +
+              Math.cos(rlat1) *
+                Math.cos(rlat2) *
+                Math.sin(difflon / 2) *
+                Math.sin(difflon / 2)
+          )
+        );
+      return d;
+    };
+    const distance = computed(() =>
+      otherPos.value === null
+        ? 0
+        : haversineDistance(currPos.value, otherPos.value)
+    );
+    return { currPos, otherPos, distance, mapDiv };
+  },
+};
+</script>
+
 <template>
-  <div class="valid_wrapper">
-    <div class="valid_text_control">
-      <div class="title">Введите код безопасности</div>
-      <div class="hint gray">
-        Введите 5-значный код, который мы отправили на номер {{ phone }}
-      </div>
+  <div class="d-flex text-center" style="height: 20vh">
+    <div class="m-auto">
+      <h4>Your Position</h4>
+      Latitude: {{ currPos.lat.toFixed(2) }}, Longitude:
+      {{ currPos.lng.toFixed(2) }}
     </div>
-    <div class="valid_form_control">
-      <form @submit.prevent="submitHandler" class="valid_form">
-        <input
-          type="text"
-          class="input"
-          v-maska
-          data-maska="#####"
-          v-model="code"
-          maxlength="5"
-        />
-      </form>
-      <div class="hint gray">
-        Отправить код ещё раз через <span>{{ formatTime }}</span>
-      </div>
-      <span>{{ useTimer }}</span>
-      <button class="btn main_button" @click="submitHandlerInValidCode">
-        OK
-      </button>
+    <div class="m-auto">
+      <h4>Distance</h4>
+      {{ distance.toFixed(2) }} miles
+    </div>
+    <div class="m-auto">
+      <h4>Clicked Position</h4>
+      <span v-if="otherPos">
+        Latitude: {{ otherPos.lat.toFixed(2) }}, Longitude:
+        {{ otherPos.lng.toFixed(2) }}
+      </span>
+      <span v-else>Click the map to select a position</span>
     </div>
   </div>
+  <div ref="mapDiv" style="width: 100%; height: 80vh" />
 </template>
-<script setup>
-import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
-import { useStore } from "vuex";
-import { vMaska } from "maska";
-import dayjs from "dayjs";
-
-const tg = window.Telegram.WebApp;
-const store = useStore();
-const code = ref("");
-const phone = localStorage.getItem("yallavebphone") || "";
-const useTimer = computed(() => store.state.auth.useTimer);
-const seconds = ref(
-  localStorage.getItem("timerSeconds")
-    ? parseInt(localStorage.getItem("timerSeconds"), 10)
-    : 120
-);
-let timer = null;
-
-const formatTime = computed(() => {
-  const minutes = Math.floor(seconds.value / 60);
-  const remainingSeconds = seconds.value % 60;
-  return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
-});
-
-const startTimer = () => {
-  if (useTimer.value) {
-    timer = setInterval(() => {
-      if (seconds.value > 0) {
-        seconds.value--;
-        localStorage.setItem("timerSeconds", seconds.value);
-      } else {
-        store.dispatch("sendCode", phone);
-        seconds.value = 120;
-        localStorage.setItem("timerSeconds", seconds.value);
-      }
-    }, 1000);
-  } else {
-  }
-};
-
-const stopTimer = () => {
-  if (timer) {
-    clearInterval(timer);
-  }
-};
-
-const submitHandlerInValidCode = async () => {
-  try {
-    tg.MainButton.hide();
-    const userData = {
-      phone,
-      code: code.value,
-    };
-    await store.dispatch("validConfirmCode", userData);
-    localStorage.removeItem("timerSeconds"); // Reset the timer after successful code validation
-  } catch (err) {
-    console.error("Error validating code:", err);
-  }
-};
-
-const showButton = () => {
-  if (code.value.length >= 5) {
-    tg.MainButton.show();
-  } else {
-    tg.MainButton.hide();
-  }
-};
-
-watch(useTimer, (newVal) => {
-  if (!newVal) {
-    stopTimer();
-    localStorage.removeItem("timerSeconds");
-    seconds.value = 120;
-  } else {
-    startTimer();
-  }
-});
-
-onMounted(async () => {
-  if (useTimer.value) {
-    startTimer();
-  }
-  tg.MainButton.setParams({ text: "OK" });
-  tg.onEvent("mainButtonClicked", submitHandlerInValidCode);
-});
-
-onBeforeUnmount(() => {
-  stopTimer();
-});
-
-watch(code, showButton);
-</script>

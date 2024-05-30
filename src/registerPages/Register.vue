@@ -18,6 +18,12 @@
           placeholder="Фамилия"
           v-model="formData.sur_name"
         />
+        <input
+          type="text"
+          class="input"
+          placeholder="Отчества"
+          v-model="formData.father_name"
+        />
         <select
           v-model="formData.gender"
           name="gender"
@@ -35,29 +41,40 @@
           v-model="formData.birthday"
         />
       </form>
-      <!-- <button class="btn main_button" @click="submitHandler">OK</button> -->
+      <pre>{{ formData }}</pre>
     </div>
   </div>
+  <button
+    class="btn main_button"
+    :disabled="isLoading"
+    v-if="show"
+    @click="submitHandlerInRegister"
+  >
+    OK
+  </button>
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, computed } from "vue";
 import { useStore } from "vuex";
 
 const store = useStore();
+const isLoading = computed(() => store.state.auth.isLoading);
 const tg = window.Telegram.WebApp;
 const phone = localStorage.getItem("yallavebphone");
 const key = localStorage.getItem("yallavebkey");
+const show = ref(false);
 const formData = ref({
   phone: phone,
   given_names: "",
   sur_name: "",
+  father_name: "",
   gender: "MALE",
   birthday: "",
   key: key,
 });
 
-const submitHandler = async () => {
+const submitHandlerInRegister = async () => {
   try {
     await store.dispatch("registerUser", formData);
   } catch (err) {
@@ -67,18 +84,18 @@ const submitHandler = async () => {
 
 const showButton = () => {
   const { given_names, sur_name, birthday } = formData.value;
-  if (given_names && sur_name && birthday) {
-    tg.MainButton.show();
+  if (given_names && sur_name) {
+    show.value = true;
   } else {
-    tg.MainButton.hide();
+    show.value = false;
   }
 };
 watchEffect(() => {
   showButton();
-  tg.MainButton.setParams({
-    text: "OK",
-  });
-  tg.onEvent("mainButtonClicked", submitHandler);
+  //   tg.MainButton.setParams({
+  //     text: "OK",
+  //   });
+  //   tg.onEvent("mainButtonClicked", submitHandler);
 });
 </script>
 <style scoped></style>

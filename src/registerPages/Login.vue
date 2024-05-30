@@ -20,7 +20,12 @@
       </div> -->
     </div>
   </div>
-  <button class="btn main_button" v-if="show" @click="submitHandlerInLogin()">
+  <button
+    class="btn main_button"
+    :disabled="isLoading"
+    v-if="show"
+    @click="submitHandlerInLogin()"
+  >
     OK
   </button>
 </template>
