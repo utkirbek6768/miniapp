@@ -10,29 +10,24 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 const getMe = async () => {
-  http
-    .post("/me")
-    .then((res) => {
-      console.log(res.data.result.client);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
-const issetToken = async () => {
   try {
-    const token = localStorage.getItem("yallavebtoken");
-    if (token) {
-      getMe();
-    } else {
-      router.push("/login");
-      localStorage.removeItem("yallavebtoken");
-      localStorage.removeItem("yallavebphone");
-      localStorage.removeItem("yallavebkey");
-      localStorage.removeItem("yallavebcode");
-    }
-  } catch (error) {
-    console.log(error);
+    const res = await http.post("/me");
+    console.log(res.data.result.client);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const issetToken = () => {
+  const token = localStorage.getItem("yallavebtoken");
+  if (token) {
+    getMe();
+  } else {
+    router.push("/login");
+    localStorage.removeItem("yallavebtoken");
+    localStorage.removeItem("yallavebphone");
+    localStorage.removeItem("yallavebkey");
+    localStorage.removeItem("yallavebcode");
   }
 };
 
@@ -44,7 +39,7 @@ const currPos = computed(() => ({
   lng: coords.value.longitude,
 }));
 const otherPos = ref(null);
-const currentPosition = ref(""); // Address of the currentPosition
+const currentAddress = ref(""); // Address of the currentAddress
 const otherAddress = ref(""); // Address of the clickedPosition
 
 const loader = new Loader({ apiKey: GOOGLE_MAPS_API_KEY });
@@ -53,40 +48,61 @@ let map = ref(null);
 let clickListener = null;
 let updateTimer = null;
 
+const getAddress = async (lat, lng) => {
+  try {
+    const res = await http.get("/map/geocoding", { params: { lat, lng } });
+    if (!res?.data?.result?.name) {
+      console.log("Address not found");
+      return "";
+    }
+    return res.data.result.name;
+  } catch (error) {
+    console.error("Error fetching address:", error);
+    return "";
+  }
+};
+
+// Watch for changes in currPos to update address
+watch(currPos, async (newPos) => {
+  currentAddress.value = await getAddress(
+    newPos.lat.toFixed(2),
+    newPos.lng.toFixed(2)
+  );
+});
+
+const debounceClick = (func, delay) => {
+  let timer;
+  return function (...args) {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+};
+
+const handleMapClick = async ({ latLng: { lat, lng } }) => {
+  otherPos.value = { lat: lat(), lng: lng() };
+  otherAddress.value = await getAddress(lat(), lng());
+};
+
+const debouncedHandleMapClick = debounceClick(handleMapClick, 300);
+
 onMounted(async () => {
   await loader.load();
   map.value = new google.maps.Map(mapDiv.value, {
     center: currPos.value,
     zoom: 15,
+    disableDefaultUI: true, // Disables all default controls
   });
-  clickListener = map.value.addListener("click", debounceClick);
+  clickListener = map.value.addListener("click", debouncedHandleMapClick);
 
   // Fetch address when component mounts
-  currentPosition.value = await getAddress(
+  currentAddress.value = await getAddress(
     currPos.value.lat.toFixed(2),
     currPos.value.lng.toFixed(2)
   );
-});
-const getAddress = async (lat, lng) => {
-  try {
-    const res = await http.get("/map/geocoding", {
-      params: { lat, lng },
-    });
-    if (!res || !res.data || !res.data.result || !res.data.result.name) {
-      console.log("Address not found");
-      return;
-    }
-    return res.data.result.name;
-  } catch (error) {
-    console.error("Error fetching address:", error);
-  }
-};
-// Watch for changes in currPos to update address
-watch(currPos, async (newPos) => {
-  currentPosition.value = await getAddress(
-    newPos.lat.toFixed(2),
-    newPos.lng.toFixed(2)
-  );
+
+  issetToken();
 });
 
 onUnmounted(() => {
@@ -94,18 +110,10 @@ onUnmounted(() => {
   if (updateTimer) clearTimeout(updateTimer);
 });
 
-const debounceClick = async ({ latLng: { lat, lng } }) => {
-  if (updateTimer) clearTimeout(updateTimer);
-  updateTimer = setTimeout(async () => {
-    otherPos.value = { lat: lat(), lng: lng() };
-    otherAddress.value = await getAddress(lat(), lng()); // Fetch address for the clicked position
-  }, 300);
-};
-
 let line = null;
 watch([map, currPos, otherPos], () => {
   if (line) line.setMap(null);
-  if (map.value && otherPos.value != null)
+  if (map.value && otherPos.value)
     line = new google.maps.Polyline({
       path: [currPos.value, otherPos.value],
       map: map.value,
@@ -135,18 +143,27 @@ const haversineDistance = (pos1, pos2) => {
 };
 
 const distance = computed(() =>
-  otherPos.value === null ? 0 : haversineDistance(currPos.value, otherPos.value)
+  otherPos.value ? haversineDistance(currPos.value, otherPos.value) : 0
 );
-
-onMounted(async () => {
-  issetToken();
-});
 </script>
 
 <template>
   <div class="home_wrapper">
-    <div ref="mapDiv" style="width: 100%; height: 100vh" />
-    <div class="tarifs">
+    <div class="tarifs_control">
+      <div class="where">
+        <div class="disc"></div>
+        <div class="where_address">
+          {{ currentAddress }}
+        </div>
+      </div>
+      <div class="whereto">
+        <div class="disc"></div>
+        <div class="whereto_address">
+          {{ otherAddress ? otherAddress : "Manzilni kiriting" }}
+        </div>
+      </div>
+    </div>
+    <div class="tarifsInSwiper">
       <swiper :slidesPerView="3" :spaceBetween="10" class="mySwiper">
         <swiper-slide class="mySlide">Slide 1</swiper-slide>
         <swiper-slide class="mySlide">Slide 2</swiper-slide>
@@ -154,49 +171,43 @@ onMounted(async () => {
         <swiper-slide class="mySlide">Slide 4</swiper-slide>
       </swiper>
     </div>
+    <div ref="mapDiv" style="width: 100%; height: 100vh" />
   </div>
 </template>
 
 <style scoped>
-.home_wrapper {
-  height: 100%;
-}
-.map_container {
-  height: 100%;
-}
-.header_wrapper {
-  width: calc(100% - 0rem);
+.tarifs_control {
   position: absolute;
-  left: 0;
-  top: 0;
-  padding: 1rem;
+  top: 0px;
+  left: 0px;
+  width: calc(100% - 1rem);
   z-index: 3;
-  background: transparent;
+  padding: 0.7rem;
+  background-color: transparent;
+  border-radius: 15px;
+  margin: 0.5rem;
+  background-color: #ffffff;
 }
-.vue-map-container {
-  height: inherit;
+.where,
+.whereto {
+  width: 100%;
+  background-color: #f6f6f6;
+  border-radius: 13px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
 }
 
-.tarifs {
-  width: 100%;
-  height: 100px;
-  position: absolute;
-  bottom: 1.3rem;
-  left: 1.3rem;
-  width: calc(100% - 2.6rem);
-  z-index: 3;
+.disc {
+  /* #912DF8 */
+  border: 5px solid #00d17e;
+  border-radius: 100%;
+  width: 20px;
+  height: 20px;
+  margin-right: 0.7rem;
 }
-.tarifs .mySwiper {
-  height: 100%;
-}
-.tarifs .mySwiper .mySlide {
-  border: 1px solid var(--tg-theme-link-color, #000);
-  background-color: var(--tg-theme-bg-color, #ffffff);
-  color: var(--tg-theme-text-color, #222222);
-  border-radius: 0.6rem;
-  height: 98%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.whereto {
+  margin-bottom: 0px;
 }
 </style>

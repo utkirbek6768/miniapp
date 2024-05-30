@@ -167,7 +167,7 @@
 
 
 
-/* ==================================================== */
+/* ========================select============================ */
 select,
   .select {
 	display: block;
@@ -218,7 +218,7 @@ select,
 	z-index: -1;
   }
 
-  /* ============================================================= */
+  /* ==============================textarea=============================== */
 
   textarea,
   .textarea {
@@ -330,14 +330,12 @@ select,
 	);
   }
 
-  /* ===========gooogle map======================== */
+  /* ===========home page style======================== */
 
   .home_wrapper {
 	height: 100%;
   }
-  .map_container {
-	height: 100%;
-  }
+  
   .header_wrapper {
 	width: calc(100% - 0rem);
 	position: absolute;
@@ -347,21 +345,19 @@ select,
 	z-index: 3;
 	background: transparent;
   }
-  .vue-map-container {
-	height: inherit;
-  }
+
   
-  .tarifs {
+  .tarifsInSwiper {
 	height: 100px;
 	position: absolute;
 	bottom: 1.3rem;
-	left: 1.3rem;
-	width: calc(100% - 2.6rem);
+	left: 0.5rem;
+	width: calc(100% - 1rem);
   }
-  .tarifs .mySwiper {
+  .tarifsInSwiper .mySwiper {
 	height: 100%;
   }
-  .tarifs .mySwiper .mySlide {
+  .tarifsInSwiper .mySwiper .mySlide {
 	border: 1px solid var(--tg-theme-link-color, #000);
 	background-color: var(--tg-theme-bg-color, #ffffff);
 	color: var(--tg-theme-text-color, #222222);
@@ -371,3 +367,5 @@ select,
 	justify-content: center;
 	align-items: center;
   }
+
+  
